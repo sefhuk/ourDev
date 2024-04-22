@@ -15,4 +15,8 @@ public class BoardService {
     public List<Board> findBoards() {
         return jdbcTemplateRepository.findAll();
     }
+
+    public Board findBoard(Long id) {
+        return jdbcTemplateRepository.findById(id).orElse(null);
+    }
 }
