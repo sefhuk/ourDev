@@ -40,7 +40,7 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
     @Override
     public Optional<Board> findById(Long id) {
         String sql = "SELECT * FROM board WHERE id = ?";
-        return Optional.ofNullable(jdbcTemplate.query(sql, new Object[]{id}, boardRowMapper).get(0));
+        return jdbcTemplate.query(sql, new Object[]{id}, boardRowMapper).stream().findAny();
     }
 
     @Override
