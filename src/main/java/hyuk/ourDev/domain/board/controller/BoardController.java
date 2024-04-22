@@ -7,9 +7,11 @@ import hyuk.ourDev.domain.board.service.BoardService;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,5 +37,14 @@ public class BoardController {
         model.addAttribute("boards", response);
 
         return "boards";
+    }
+
+    @GetMapping("/board/{id}")
+    public String boardDetails(@PathVariable Long id, Model model) {
+        Board board = boardService.findBoard(id);
+        BoardResponseDto response = mapper.boardToBoardResponseDto(board);
+        model.addAttribute("board", response);
+
+        return "board";
     }
 }
