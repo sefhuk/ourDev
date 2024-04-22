@@ -12,5 +12,5 @@ public interface JdbcTemplateRepository {
 
     Board save(Board board);
 
-    void delete(Board board);
+    void delete(Long id);
 }
