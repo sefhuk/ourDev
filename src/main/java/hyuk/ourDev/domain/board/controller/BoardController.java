@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class BoardController {
         List<Board> boards = boardService.findBoards();
 
         List<BoardResponseDto> response = new ArrayList<>();
-        for(Board board : boards) {
+        for (Board board : boards) {
             response.add(mapper.boardToBoardResponseDto(board));
         }
 
@@ -63,5 +64,16 @@ public class BoardController {
     @GetMapping("/board/new")
     public String boardCreatePage() {
         return "board_new";
+    }
+
+    @PostMapping("/board/delete/{id}")
+    public String boardRemove(@PathVariable Long id, @RequestParam String author) {
+        try {
+            boardService.removeBoard(id, author);
+        } catch (Exception e) {
+            return "redirect:/board/" + id;
+        }
+
+        return "redirect:/board";
     }
 }
