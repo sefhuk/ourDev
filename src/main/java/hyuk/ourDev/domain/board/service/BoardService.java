@@ -19,4 +19,8 @@ public class BoardService {
     public Board findBoard(Long id) {
         return jdbcTemplateRepository.findById(id).orElse(null);
     }
+
+    public Board addBoard(Board board) {
+        return jdbcTemplateRepository.save(board);
+    }
 }
