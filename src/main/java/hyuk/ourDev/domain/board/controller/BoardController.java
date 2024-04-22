@@ -58,4 +58,10 @@ public class BoardController {
         model.addAttribute("board", response);
 
         return "redirect:board/" + response.getId();
+    }
+
+    @GetMapping("/board/new")
+    public String boardCreatePage() {
+        return "board_new";
+    }
 }
