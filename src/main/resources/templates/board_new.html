@@ -40,6 +40,7 @@
         <input
           type="text"
           name="name"
+          id="name"
           placeholder="게시판 이름을 입력하세요. ex) 질문, Q&A"
           class="px-[20px] py-[5px]"
         />
@@ -47,6 +48,7 @@
         <input
           type="text"
           name="author"
+          id="author"
           placeholder="게시판 생성자 이름을 입력하세요"
           class="px-[20px] py-[5px]"
         />
@@ -54,6 +56,7 @@
           type="submit"
           id="submit"
           class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
+          th:onclick="requestPost(event, [[${boards}]]);"
         >
           등 록
         </button>
@@ -61,16 +64,46 @@
     </div>
 
     <script>
-      let input = document.getElementsByTagName('input');
-      let submit = document.getElementById('submit');
+      const requestPost = (event, boards) => {
+        event.preventDefault();
 
-      submit.addEventListener('click', (e) => {
+        let input = document.getElementsByTagName('input');
+        let author = document.getElementById("author").value;
+        let name = document.getElementById("name").value;
+
+
         if (input[0].value === '' || input[1].value === '') {
-          e.preventDefault();
           alert('모든 정보를 입력해주세요');
           return;
         }
-      });
+
+        let failed = false;
+        boards.forEach(e => {
+          if(e.name === name) {
+            failed = true;
+            alert("이름 중복. 다른 이름을 입력해주세요");
+            return;
+          }
+        })
+
+        if(failed) return;
+
+        return fetch("http://localhost:8080/board", {
+          method: "Post",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            author: author,
+            name: name,
+          }),
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert("게시판이 생성 되었습니다.")
+          window.location.href = `/board/${data.id}`;
+        })
+      };
     </script>
   </body>
 </html>
