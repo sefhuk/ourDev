@@ -43,7 +43,7 @@
           >
         </div>
       </div>
-      <form class="w-[100%] flex justify-end items-end" action="{/board/delete}" th:action="@{/board/delete/{id}(id=${board.id})}" method="post">
+      <form class="w-[100%] flex justify-end items-end" action="{/board/delete}" th:action="@{/board/{id}(id=${board.id})}" method="post" th:method="delete">
         <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" placeholder="이름을 입력하세요.">
         <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">게시판 삭제</button>
         <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">삭제 확인</button>
@@ -79,7 +79,7 @@
       </div>
     </main>
     <script>
-      let input = document.getElementsByTagName("input")[0];
+      let input = document.getElementsByTagName("input")[1];
       let buttons = document.getElementsByTagName("button");
 
       buttons[0].addEventListener("click", (e) => {

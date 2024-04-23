@@ -35,7 +35,7 @@
   <body class="bg-[skyblue]">
     <div class="flex flex-col pt-[100px]">
       <h1 class="text-center text-[50px]">게시판 생성</h1>
-      <form action="/board" method="post" class="flex flex-col px-[200px]">
+      <form action="/board" method="post" th:method="post" class="flex flex-col px-[200px]">
         <label>게시판 이름 ('게시판' 제외)</label>
         <input
           type="text"
