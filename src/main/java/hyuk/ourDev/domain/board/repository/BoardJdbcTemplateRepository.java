@@ -67,9 +67,9 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
                 board.setId(key.longValue());
             }
         } else {
-            String sql = "UPDATE board SET name = ?, author = ?, updated_at = ?";
+            String sql = "UPDATE board SET name = ?, author = ?, updated_at = ? WHERE id = ?";
             jdbcTemplate.update(sql, board.getName(), board.getAuthor(),
-                Timestamp.valueOf(LocalDateTime.now()));
+                Timestamp.valueOf(LocalDateTime.now()), board.getId());
         }
         return board;
     }

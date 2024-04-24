@@ -23,4 +23,8 @@ public class BoardService {
     public Board addBoard(Board board) {
         return jdbcTemplateRepository.save(board);
     }
+
+    public Board modifyBoard(Board board) {
+        return jdbcTemplateRepository.save(board);
+    }
 }
