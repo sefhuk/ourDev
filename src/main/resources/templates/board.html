@@ -43,8 +43,9 @@
           >
         </div>
       </div>
-      <form class="w-[100%] flex justify-end items-end" action="{/board/delete}" th:action="@{/board/{id}(id=${board.id})}" method="post" th:method="delete">
-        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" placeholder="이름을 입력하세요.">
+      <form class="w-[100%] flex justify-end items-end">
+<!--            method="post" action="{/board/delete}" th:method="delete" -->
+        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" id="author" placeholder="이름을 입력하세요.">
         <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">게시판 삭제</button>
         <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">삭제 확인</button>
       </form>
@@ -77,9 +78,10 @@
           </a>
         </div>
       </div>
+      <button th:onclick="c([[${board.name}]])">fdsafsafsaf</button>
     </main>
     <script>
-      let input = document.getElementsByTagName("input")[1];
+      let input = document.getElementsByTagName("input")[0];
       let buttons = document.getElementsByTagName("button");
 
       buttons[0].addEventListener("click", (e) => {
@@ -87,6 +89,29 @@
         input.style.display = "block";
         buttons[0].style.display = "none";
         buttons[1].style.display = "block";
+      });
+
+      buttons[1].addEventListener("click", (e) => {
+        e.preventDefault();
+
+        let author = document.getElementById("author").value;
+        fetch(location.href, {
+          method: "Delete",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            author: author,
+          }),
+        })
+        .then(res => {
+          if (res.ok) {
+            alert("삭제 되었습니다");
+            window.location.href = "http://localhost:8080/board";
+          } else {
+            alert("게시판 주인만 삭제가 가능합니다. 이름을 확인해주세요");
+          }
+        })
       });
     </script>
   </body>
