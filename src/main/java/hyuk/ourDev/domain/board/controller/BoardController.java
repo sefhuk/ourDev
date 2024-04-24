@@ -7,6 +7,7 @@ import hyuk.ourDev.domain.board.mapper.BoardMapper;
 import hyuk.ourDev.domain.board.service.BoardService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +69,8 @@ public class BoardController {
 
     @GetMapping("/board/new")
     public String boardCreatePage(@ModelAttribute("boards") List<BoardResponseDto> boards, Model model) {
-        model.addAttribute("boards", boards);
+        model.addAttribute("boards", boards.stream()
+            .map(BoardResponseDto::getName).collect(Collectors.toList()));
         return "board_new";
     }
 
