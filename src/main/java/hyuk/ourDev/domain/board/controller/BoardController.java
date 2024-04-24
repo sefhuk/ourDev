@@ -7,6 +7,7 @@ import hyuk.ourDev.domain.board.mapper.BoardMapper;
 import hyuk.ourDev.domain.board.service.BoardService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -83,4 +87,31 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+    @GetMapping("/board/{id}/update")
+    public String boardUpdatePage(@PathVariable Long id, @ModelAttribute("boards") List<BoardResponseDto> boards, Model model) {
+        model.addAttribute("board", boards.stream()
+            .filter(e -> Objects.equals(e.getId(), id))
+            .collect(Collectors.toList()).get(0));
+        model.addAttribute("possible", (Boolean) model.getAttribute("possible"));
+
+        return "board_update";
+    }
+
+    @PatchMapping("/board/{id}")
+    public String boardModify(@PathVariable Long id,
+        @RequestParam String name, @RequestParam String author, RedirectAttributes redirectAttributes) {
+        Board findBoard = boardService.findBoard(id);
+
+        if (!findBoard.getAuthor().equals(author)) {
+            redirectAttributes.addFlashAttribute("possible", false);
+
+            return "redirect:/board/" + id + "/update";
+        }
+
+        Board request = Board.builder().id(id).author(author).name(name).build();
+        boardService.modifyBoard(request);
+        return "redirect:/board";
+    }
+
 }

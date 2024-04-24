@@ -48,6 +48,11 @@
         <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">게시판 삭제</button>
         <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">삭제 확인</button>
       </form>
+      <form class="w-[100%] flex justify-end items-end mt-[20px]">
+        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" id="author-update" placeholder="이름을 입력하세요.">
+        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" id="new-name" placeholder="새로운 게시판 이름">
+        <a class="flex justify-center items-center text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]" th:href="@{/board/{id}/update(id=${board.id})}"><span>게시판 수정</span></a>
+      </form>
     </header>
     <main class="flex justify-between px-[200px] mt-[80px]">
       <div class="flex flex-col w-11/12">
