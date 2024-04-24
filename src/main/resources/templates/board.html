@@ -20,7 +20,7 @@
     </style>
   </head>
   <body>
-    <header class="h-[562px] bg-[#012355]/90 px-[100px] pt-[50px] text-white">
+    <header class="bg-[#012355]/90 px-[100px] pt-[50px] pb-[20px] text-white">
       <div class="flex justify-between">
         <h1>
           <a class="text-[40px] font-bold" href="/">OurDev</a>
@@ -44,8 +44,7 @@
         </div>
       </div>
       <form class="w-[100%] flex justify-end items-end">
-<!--            method="post" action="{/board/delete}" th:method="delete" -->
-        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" id="author" placeholder="이름을 입력하세요.">
+        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" id="author-delete" placeholder="이름을 입력하세요.">
         <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">게시판 삭제</button>
         <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">삭제 확인</button>
       </form>
@@ -78,15 +77,14 @@
           </a>
         </div>
       </div>
-      <button th:onclick="c([[${board.name}]])">fdsafsafsaf</button>
     </main>
     <script>
-      let input = document.getElementsByTagName("input")[0];
+      let inputs = document.getElementsByTagName("input");
       let buttons = document.getElementsByTagName("button");
 
       buttons[0].addEventListener("click", (e) => {
         e.preventDefault();
-        input.style.display = "block";
+        inputs[0].style.display = "block";
         buttons[0].style.display = "none";
         buttons[1].style.display = "block";
       });
@@ -94,7 +92,7 @@
       buttons[1].addEventListener("click", (e) => {
         e.preventDefault();
 
-        let author = document.getElementById("author").value;
+        let author = document.getElementById("author-delete").value;
         fetch(location.href, {
           method: "Delete",
           headers: {
