@@ -63,22 +63,16 @@
           <p class="w-[75%]">제목</p>
           <p class="w-[10%]">작성자</p>
         </div>
-        <div class="flex flex-col w-[100%]">
+        <div class="flex flex-col w-[1230px]">
           <a
-            class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] border-2 border-solid border-black rounded-2xl text-[25px] text-center"
-            href="tip-board_detail.html"
+              class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] border-2 border-solid border-black rounded-2xl text-[25px] text-center"
+              href="tip-board_detail.html"
+              th:each="post: ${posts}"
+              th:href="post"
           >
-            <p class="w-[5%]">2</p>
-            <p class="w-[75%]">Spring Data Jpa 사용법</p>
-            <p class="w-[10%]">Kim</p>
-          </a>
-          <a
-            class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] border-2 border-solid border-black rounded-2xl text-[25px] text-center"
-            href="tip-board_detail.html"
-          >
-            <p class="w-[5%]">1</p>
-            <p class="w-[75%]">Spring Data Jpa 사용법</p>
-            <p class="w-[10%]">Kim</p>
+            <p class="w-[86px]" th:text="${postStat.size - postStat.index}">2</p>
+            <p class="w-[897px]" th:text="${post.title}">Spring Data Jpa 사용법</p>
+            <p class="w-[247px]" th:text="${post.author}">Kim</p>
           </a>
         </div>
       </div>
