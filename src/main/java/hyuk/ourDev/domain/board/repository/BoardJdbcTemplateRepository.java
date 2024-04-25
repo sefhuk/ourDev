@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
 
     public final JdbcTemplate jdbcTemplate;
@@ -45,8 +48,32 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
             .findAny();
 
         if (board.isPresent()) {
+
             String postSql = "SELECT * FROM post WHERE board_id = ?";
             jdbcTemplate.query(postSql, new Object[]{id}, (rs, count) -> {
+                return Post.builder().id(rs.getLong("id")).title(rs.getString("title"))
+                    .content(rs.getString("content"))
+                    .author(rs.getString("author"))
+                    .build();
+            }).stream().forEach(p -> p.setBoard(board.get()));
+        }
+
+        return board;
+    }
+
+    @Override
+    public Optional<Board> findByIdPaging(Long id, Pageable pageable) {
+        String sql = "SELECT * FROM board WHERE id = ?";
+        Optional<Board> board = jdbcTemplate.query(sql, new Object[]{id}, boardRowMapper).stream()
+            .findAny();
+
+        if (board.isPresent()) {
+            int pageNumber = pageable.getPageNumber();
+            int pageSize = pageable.getPageSize();
+            int offset = pageNumber * pageSize;
+
+            String postSql = "SELECT * FROM post WHERE board_id = ? ORDER BY created_at ASC LIMIT ? OFFSET ?";
+            jdbcTemplate.query(postSql, new Object[]{id, pageSize, offset}, (rs, count) -> {
                 return Post.builder().id(rs.getLong("id")).title(rs.getString("title"))
                     .content(rs.getString("content"))
                     .author(rs.getString("author"))
