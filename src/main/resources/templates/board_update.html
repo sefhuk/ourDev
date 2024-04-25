@@ -52,15 +52,56 @@
           placeholder="게시판 생성자 이름을 입력하세요"
           class="px-[20px] py-[5px]"
         />
-        <div class="text-[red] text-[15px]" th:if="${possible == false}">게시판 주인만 수정이 가능합니다.</div>
+        <div class="text-[red] text-[15px] hidden" id="isAuthor">게시판 주인만 수정이 가능합니다.</div>
         <button
           type="submit"
           id="submit"
           class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
+          th:onclick="requestPost(event, [[${names}]], [[${board.id}]]);"
         >
-          등 록
+          수 정
         </button>
       </form>
+
+      <script>
+        const requestPost = (event, names, id) => {
+          event.preventDefault();
+
+          let name = document.getElementById("name").value;
+          let author = document.getElementById("author").value;
+
+          let failed = false;
+          names.forEach(e => {
+            if (e === name) {
+              alert("이름 중복. 다른 이름을 입력해주세요");
+              failed = true;
+              return;
+            }
+          })
+
+          if(failed) return;
+
+          return fetch(`http://localhost:8080/board/${id}`, {
+            method: "Put",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              author: author,
+              name: name,
+            }),
+          })
+          .then(res => {
+            if (res.ok) {
+              alert("게시판이 수정되었습니다");
+              window.location.href = "/board";
+            } else {
+              let isAuthor = document.getElementById("isAuthor");
+              isAuthor.style.display = "block";
+            }
+          })
+        }
+      </script>
     </div>
   </body>
 </html>
