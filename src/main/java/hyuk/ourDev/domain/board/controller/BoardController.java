@@ -45,9 +45,9 @@ public class BoardController {
     public String boardList(Model model) {
         List<Board> boards = boardService.findBoards();
 
-        List<BoardResponseDto> response = new ArrayList<>();
-        boards.stream().map(b -> boardMapper.boardToBoardResponseDto(b))
-            .collect(Collectors.toList());
+        List<BoardResponseDto> response =
+            boards.stream().map(b -> boardMapper.boardToBoardResponseDto(b))
+                .collect(Collectors.toList());
 
         model.addAttribute("boards", response);
 
