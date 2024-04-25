@@ -17,13 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -73,7 +71,7 @@ public class BoardController {
 
     @GetMapping("/board/new")
     public String boardCreatePage(@ModelAttribute("boards") List<BoardResponseDto> boards, Model model) {
-        model.addAttribute("boards", boards.stream()
+        model.addAttribute("names", boards.stream()
             .map(BoardResponseDto::getName).collect(Collectors.toList()));
         return "board_new";
     }
@@ -93,25 +91,27 @@ public class BoardController {
         model.addAttribute("board", boards.stream()
             .filter(e -> Objects.equals(e.getId(), id))
             .collect(Collectors.toList()).get(0));
+        model.addAttribute("names", boards.stream()
+            .map(BoardResponseDto::getName).collect(Collectors.toList()));
         model.addAttribute("possible", (Boolean) model.getAttribute("possible"));
 
         return "board_update";
     }
 
-    @PatchMapping("/board/{id}")
-    public String boardModify(@PathVariable Long id,
-        @RequestParam String name, @RequestParam String author, RedirectAttributes redirectAttributes) {
+    @PutMapping("/board/{id}")
+    public ResponseEntity boardModify(@PathVariable Long id,
+        @RequestBody BoardRequestDto boardRequestDto) {
         Board findBoard = boardService.findBoard(id);
 
-        if (!findBoard.getAuthor().equals(author)) {
-            redirectAttributes.addFlashAttribute("possible", false);
+        if (!findBoard.getAuthor().equals(boardRequestDto.getAuthor())) {
 
-            return "redirect:/board/" + id + "/update";
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        Board request = Board.builder().id(id).author(author).name(name).build();
+        Board request = Board.builder().id(id).author(boardRequestDto.getAuthor())
+            .name(boardRequestDto.getName()).build();
         boardService.modifyBoard(request);
-        return "redirect:/board";
+        return ResponseEntity.ok().build();
     }
 
 }
