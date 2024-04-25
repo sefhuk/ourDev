@@ -1,5 +1,6 @@
 package hyuk.ourDev.domain.post.mapper;
 
+import hyuk.ourDev.domain.post.dto.PostRequestDto;
 import hyuk.ourDev.domain.post.dto.PostResponseDto;
 import hyuk.ourDev.domain.post.entity.Post;
 import org.mapstruct.Mapper;
@@ -11,4 +12,6 @@ public interface PostMapper {
 
     @Mapping(source = "board.id", target = "boardId")
     PostResponseDto PostToPostResponseDto(Post post);
+
+    Post PostRequestDtoToPost(PostRequestDto postRequestDto);
 }
