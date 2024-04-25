@@ -6,9 +6,7 @@ import hyuk.ourDev.domain.board.entity.Board;
 import hyuk.ourDev.domain.board.mapper.BoardMapper;
 import hyuk.ourDev.domain.board.service.BoardService;
 import hyuk.ourDev.domain.post.dto.PostResponseDto;
-import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.mapper.PostMapper;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
