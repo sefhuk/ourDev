@@ -38,7 +38,8 @@
         >
           <a
             class="text-[30px] text-[#012355]/90 hover:text-white"
-            href="/board/new"
+            href="/board/post"
+            th:href="@{/board/{id}/post/new(id=${board.id})}"
             >New Post</a
           >
         </div>
@@ -70,7 +71,7 @@
               th:each="post: ${posts}"
               th:href="post"
           >
-            <p class="w-[86px]" th:text="${postStat.size - postStat.index}">2</p>
+            <p class="w-[86px]" th:text="${postStat.index + 1}">2</p>
             <p class="w-[897px]" th:text="${post.title}">Spring Data Jpa 사용법</p>
             <p class="w-[247px]" th:text="${post.author}">Kim</p>
           </a>
