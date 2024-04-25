@@ -1,6 +1,7 @@
 package hyuk.ourDev.domain.board.repository;
 
 import hyuk.ourDev.domain.board.entity.Board;
+import hyuk.ourDev.domain.post.entity.Post;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -12,9 +13,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
 
     public final JdbcTemplate jdbcTemplate;
@@ -38,7 +41,20 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
     @Override
     public Optional<Board> findById(Long id) {
         String sql = "SELECT * FROM board WHERE id = ?";
-        return jdbcTemplate.query(sql, new Object[]{id}, boardRowMapper).stream().findAny();
+        Optional<Board> board = jdbcTemplate.query(sql, new Object[]{id}, boardRowMapper).stream()
+            .findAny();
+
+        if (board.isPresent()) {
+            String postSql = "SELECT * FROM post WHERE board_id = ?";
+            jdbcTemplate.query(postSql, new Object[]{id}, (rs, count) -> {
+                return Post.builder().id(rs.getLong("id")).title(rs.getString("title"))
+                    .content(rs.getString("content"))
+                    .author(rs.getString("author"))
+                    .build();
+            }).stream().forEach(p -> p.setBoard(board.get()));
+        }
+
+        return board;
     }
 
     @Override
@@ -74,6 +90,9 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
 
     @Override
     public void delete(Long id) {
+        String sql2 = "DELETE FROM post WHERE board_id = ?";
+        jdbcTemplate.update(sql2, id);
+
         String sql = "DELETE FROM board WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
