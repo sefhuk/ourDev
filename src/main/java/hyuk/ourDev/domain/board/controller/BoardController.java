@@ -5,6 +5,9 @@ import hyuk.ourDev.domain.board.dto.BoardResponseDto;
 import hyuk.ourDev.domain.board.entity.Board;
 import hyuk.ourDev.domain.board.mapper.BoardMapper;
 import hyuk.ourDev.domain.board.service.BoardService;
+import hyuk.ourDev.domain.post.dto.PostResponseDto;
+import hyuk.ourDev.domain.post.entity.Post;
+import hyuk.ourDev.domain.post.mapper.PostMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
@@ -29,7 +33,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class BoardController {
 
     public final BoardService boardService;
-    public final BoardMapper mapper;
+    public final BoardMapper boardMapper;
+    public final PostMapper postMapper;
 
     @GetMapping
     public String index() {
@@ -41,9 +46,8 @@ public class BoardController {
         List<Board> boards = boardService.findBoards();
 
         List<BoardResponseDto> response = new ArrayList<>();
-        for (Board board : boards) {
-            response.add(mapper.boardToBoardResponseDto(board));
-        }
+        boards.stream().map(b -> boardMapper.boardToBoardResponseDto(b))
+            .collect(Collectors.toList());
 
         model.addAttribute("boards", response);
 
@@ -53,19 +57,24 @@ public class BoardController {
     @GetMapping("/board/{id}")
     public String boardDetails(@PathVariable Long id, Model model) {
         Board board = boardService.findBoard(id);
-        BoardResponseDto response = mapper.boardToBoardResponseDto(board);
-        model.addAttribute("board", response);
+        BoardResponseDto responseBoard = boardMapper.boardToBoardResponseDto(board);
 
+        List<PostResponseDto> responsePosts = responseBoard.getPosts().stream()
+            .map(p -> postMapper.PostToPostResponseDto(p)).collect(
+                Collectors.toList());
+
+        model.addAttribute("board", responseBoard);
+        model.addAttribute("posts", responsePosts);
         return "board";
     }
 
     @PostMapping("/board")
     public ResponseEntity boardAdd(@RequestBody BoardRequestDto boardRequestDto) {
-        Board requestBoard = mapper.boardRequestDtoToBoard(boardRequestDto);
+        Board requestBoard = boardMapper.boardRequestDtoToBoard(boardRequestDto);
 
         Board board = boardService.addBoard(requestBoard);
 
-        BoardResponseDto boardResponseDto = mapper.boardToBoardResponseDto(board);
+        BoardResponseDto boardResponseDto = boardMapper.boardToBoardResponseDto(board);
         return ResponseEntity.ok().body(boardResponseDto);
     }
 
