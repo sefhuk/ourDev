@@ -90,6 +90,9 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
 
     @Override
     public void delete(Long id) {
+        String sql2 = "DELETE FROM post WHERE board_id = ?";
+        jdbcTemplate.update(sql2, id);
+
         String sql = "DELETE FROM board WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
