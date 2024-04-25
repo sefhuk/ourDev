@@ -56,7 +56,7 @@
           type="submit"
           id="submit"
           class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
-          th:onclick="requestPost(event, [[${boards}]]);"
+          th:onclick="requestPost(event, [[${names}]]);"
         >
           등 록
         </button>
@@ -79,7 +79,7 @@
 
         let failed = false;
         boards.forEach(e => {
-          if(e.name === name) {
+          if(e === name) {
             failed = true;
             alert("이름 중복. 다른 이름을 입력해주세요");
             return;
@@ -101,7 +101,7 @@
         .then(res => res.json())
         .then(data => {
           alert("게시판이 생성 되었습니다.")
-          window.location.href = `/board/${data.id}`;
+          window.location.href = `/board`;
         })
       };
     </script>
