@@ -5,6 +5,8 @@ import hyuk.ourDev.domain.board.repository.JdbcTemplateRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,11 @@ public class BoardService {
 
     public Board findBoard(Long id) {
         return jdbcTemplateRepository.findById(id).orElse(null);
+    }
+
+    public Board findBoardPaging(Long id, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return jdbcTemplateRepository.findByIdPaging(id, pageable).orElse(null);
     }
 
     public Board addBoard(Board board) {

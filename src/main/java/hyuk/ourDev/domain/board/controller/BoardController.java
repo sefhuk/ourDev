@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -55,8 +56,9 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String boardDetails(@PathVariable Long id, Model model) {
-        Board board = boardService.findBoard(id);
+    public String boardDetails(@RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "5") Integer size, @PathVariable Long id, Model model) {
+        Board board = boardService.findBoardPaging(id, page, size);
         BoardResponseDto responseBoard = boardMapper.boardToBoardResponseDto(board);
 
         List<PostResponseDto> responsePosts = responseBoard.getPosts().stream()
