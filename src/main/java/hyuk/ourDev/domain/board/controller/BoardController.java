@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -78,14 +77,16 @@ public class BoardController {
     }
 
     @GetMapping("/board/new")
-    public String boardCreatePage(@ModelAttribute("boards") List<BoardResponseDto> boards, Model model) {
+    public String boardCreatePage(@ModelAttribute("boards") List<BoardResponseDto> boards,
+        Model model) {
         model.addAttribute("names", boards.stream()
             .map(BoardResponseDto::getName).collect(Collectors.toList()));
         return "board_new";
     }
 
     @DeleteMapping("/board/{id}")
-    public ResponseEntity boardRemove(@PathVariable Long id, @RequestBody BoardRequestDto boardRequestDto) {
+    public ResponseEntity boardRemove(@PathVariable Long id,
+        @RequestBody BoardRequestDto boardRequestDto) {
         try {
             boardService.removeBoard(id, boardRequestDto.getAuthor());
             return ResponseEntity.ok().build();
@@ -95,7 +96,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}/update")
-    public String boardUpdatePage(@PathVariable Long id, @ModelAttribute("boards") List<BoardResponseDto> boards, Model model) {
+    public String boardUpdatePage(@PathVariable Long id,
+        @ModelAttribute("boards") List<BoardResponseDto> boards, Model model) {
         model.addAttribute("board", boards.stream()
             .filter(e -> Objects.equals(e.getId(), id))
             .collect(Collectors.toList()).get(0));
