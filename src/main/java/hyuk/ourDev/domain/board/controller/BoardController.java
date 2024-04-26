@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -61,7 +62,6 @@ public class BoardController {
         List<PostResponseDto> responsePosts = responseBoard.getPosts().stream()
             .map(p -> postMapper.PostToPostResponseDto(p)).collect(
                 Collectors.toList());
-
         model.addAttribute("board", responseBoard);
         model.addAttribute("posts", responsePosts);
         return "board";
