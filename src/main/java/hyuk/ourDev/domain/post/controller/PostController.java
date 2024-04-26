@@ -6,7 +6,6 @@ import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.mapper.PostMapper;
 import hyuk.ourDev.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/board/{board_id}")
-@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -68,7 +66,7 @@ public class PostController {
     public String postUpdatePage(@PathVariable("board_id") Long boardId,
         @PathVariable("postId") Long postId, @RequestParam("title") String title,
         @RequestParam("content") String content,
-        @RequestParam("content") String author,
+        @RequestParam("author") String author,
         Model model) {
         model.addAttribute("title", title);
         model.addAttribute("content", content);
