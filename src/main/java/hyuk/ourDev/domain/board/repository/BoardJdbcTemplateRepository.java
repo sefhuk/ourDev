@@ -78,7 +78,7 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
                     .content(rs.getString("content"))
                     .author(rs.getString("author"))
                     .build();
-            }).stream().forEach(p -> p.setBoard(board.get()));
+            }).forEach(p -> p.setBoard(board.get()));
         }
 
         return board;
