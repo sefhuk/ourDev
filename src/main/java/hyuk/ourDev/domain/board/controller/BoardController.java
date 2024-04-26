@@ -45,7 +45,7 @@ public class BoardController {
         List<Board> boards = boardService.findBoards();
 
         List<BoardResponseDto> response =
-            boards.stream().map(b -> boardMapper.boardToBoardResponseDto(b))
+            boards.stream().map(boardMapper::boardToBoardResponseDto)
                 .collect(Collectors.toList());
 
         model.addAttribute("boards", response);
@@ -60,7 +60,7 @@ public class BoardController {
         BoardResponseDto responseBoard = boardMapper.boardToBoardResponseDto(board);
 
         List<PostResponseDto> responsePosts = responseBoard.getPosts().stream()
-            .map(p -> postMapper.PostToPostResponseDto(p)).collect(
+            .map(postMapper::PostToPostResponseDto).collect(
                 Collectors.toList());
         model.addAttribute("board", responseBoard);
         model.addAttribute("posts", responsePosts);
