@@ -55,19 +55,19 @@
         <a class="flex justify-center items-center text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]" th:href="@{/board/{id}/update(id=${board.id})}"><span>게시판 수정</span></a>
       </form>
     </header>
-    <main class="flex justify-between px-[200px] mt-[80px]">
-      <div class="flex flex-col w-11/12">
+    <main class="flex flex-col justify-between px-[200px] mt-[80px]">
+      <div class="flex flex-col w-[1230px]">
         <div
-          class="flex justify-between w-[100%] h-[80px] rounded-2xl text-[25px] text-center"
+          class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] text-[25px] text-center"
         >
-          <p class="w-[5%]">번호</p>
-          <p class="w-[75%]">제목</p>
-          <p class="w-[10%]">작성자</p>
+          <p class="w-[86px]">번호</p>
+          <p class="w-[897px]">제목</p>
+          <p class="w-[247px]">작성자</p>
         </div>
         <div class="flex flex-col w-[1230px]">
           <a
               class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] border-2 border-solid border-black rounded-2xl text-[25px] text-center"
-              href="tip-board_detail.html"
+              href="post.html"
               th:each="post: ${posts}"
               th:href="@{/board/{boardId}/post/{postId}(boardId=${board.id}, postId=${post.id})}"
           >

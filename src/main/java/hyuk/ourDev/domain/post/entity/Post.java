@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Post extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,5 +48,11 @@ public class Post extends BaseTimeEntity {
     public void setBoard(Board board) {
         this.board = board;
         board.getPosts().add(this);
+    }
+
+    public void updatePost(String title, String author, String content) {
+        this.title = title;
+        this.author = author;
+        this.content = content;
     }
 }
