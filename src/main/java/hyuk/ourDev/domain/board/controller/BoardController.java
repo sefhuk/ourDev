@@ -99,8 +99,7 @@ public class BoardController {
     public String boardUpdatePage(@PathVariable Long id,
         @ModelAttribute("boards") List<BoardResponseDto> boards, Model model) {
         model.addAttribute("board", boards.stream()
-            .filter(e -> Objects.equals(e.getId(), id))
-            .collect(Collectors.toList()).get(0));
+            .filter(e -> Objects.equals(e.getId(), id)).toList().get(0));
         model.addAttribute("names", boards.stream()
             .map(BoardResponseDto::getName).collect(Collectors.toList()));
         model.addAttribute("possible", (Boolean) model.getAttribute("possible"));
