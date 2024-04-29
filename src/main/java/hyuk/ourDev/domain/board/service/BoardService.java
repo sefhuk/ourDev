@@ -2,20 +2,21 @@ package hyuk.ourDev.domain.board.service;
 
 import hyuk.ourDev.domain.board.entity.Board;
 import hyuk.ourDev.domain.board.repository.JdbcTemplateRepository;
+import hyuk.ourDev.domain.post.entity.Post;
+import hyuk.ourDev.domain.post.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class BoardService {
 
     private final JdbcTemplateRepository jdbcTemplateRepository;
+    private final PostService postService;
 
     public List<Board> findBoards() {
         return jdbcTemplateRepository.findAll();
@@ -49,6 +50,8 @@ public class BoardService {
             throw new EntityNotFoundException();
         }
 
+        List<Post> posts = findBoard.getPosts();
+        posts.stream().map(Post::getId).forEach(postService::removePost);
         jdbcTemplateRepository.delete(id);
     }
 }
