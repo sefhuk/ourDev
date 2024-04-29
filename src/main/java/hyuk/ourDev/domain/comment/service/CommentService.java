@@ -17,4 +17,8 @@ public class CommentService {
     public List<Comment> findComments(Long postID) {
         return commentRepository.findAllByPostId(postID);
     }
+
+    public Comment addComment(Comment comment) {
+        return commentRepository.save(comment);
+    }
 }
