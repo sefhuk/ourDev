@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: 'Jua', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      input {
+        height: 40px;
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+      }
+
+      label {
+        margin: 30px 0 10px;
+      }
+    </style>
+    <title>OurDev</title>
+  </head>
+  <body class="bg-[skyblue]">
+    <div class="flex flex-col pt-[100px]">
+      <h1 class="text-center text-[50px]" th:text="|${board.name} 게시판 수정|">게시판 수정</h1>
+      <form action="/board" method="patch" th:action="@{/board/{id}(id=${board.id})}" th:method="patch" class="flex flex-col px-[200px]">
+        <label>게시판 이름 ('게시판' 제외)</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="게시판 이름을 입력하세요. ex) 질문, Q&A"
+          class="px-[20px] py-[5px]"
+        />
+        <label>생성자 이름</label>
+        <input
+          type="text"
+          name="author"
+          id="author"
+          placeholder="게시판 생성자 이름을 입력하세요"
+          class="px-[20px] py-[5px]"
+        />
+        <div class="text-[red] text-[15px] hidden" id="isAuthor">게시판 주인만 수정이 가능합니다.</div>
+        <button
+          type="submit"
+          id="submit"
+          class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
+          th:onclick="requestPost(event, [[${names}]], [[${board.id}]]);"
+        >
+          수 정
+        </button>
+      </form>
+
+      <script>
+        const requestPost = (event, names, id) => {
+          event.preventDefault();
+
+          let name = document.getElementById("name").value;
+          let author = document.getElementById("author").value;
+
+          let failed = false;
+          names.forEach(e => {
+            if (e === name) {
+              alert("이름 중복. 다른 이름을 입력해주세요");
+              failed = true;
+              return;
+            }
+          })
+
+          if(failed) return;
+
+          return fetch(`http://localhost:8080/board/${id}`, {
+            method: "Put",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              author: author,
+              name: name,
+            }),
+          })
+          .then(res => {
+            if (res.ok) {
+              alert("게시판이 수정되었습니다");
+              window.location.href = "/board";
+            } else {
+              let isAuthor = document.getElementById("isAuthor");
+              isAuthor.style.display = "block";
+            }
+          })
+        }
+      </script>
+    </div>
+  </body>
+</html>

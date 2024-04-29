@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: 'Jua', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      input {
+        height: 40px;
+        /* padding-left: 200px; */
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+      }
+
+      label {
+        margin: 30px 0 10px;
+      }
+    </style>
+    <title>OurDev</title>
+  </head>
+  <body class="bg-[skyblue]">
+    <div class="flex flex-col pt-[100px]">
+      <h1 class="text-center text-[50px]">게시글 등록</h1>
+      <form class="flex flex-col px-[200px]" method="post" th:action="@{/board/{id}/post(id=${id})}">
+        <label for="author">작성자 이름</label>
+        <input
+          type="text"
+          id="author"
+          name="author"
+          placeholder="작성자 이름을 입력하세요"
+          class="px-[20px] py-[5px]"
+          required
+        />
+        <label for="title">글 제목</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          placeholder="글 제목을 입력하세요"
+          class="px-[20px] py-[5px]"
+          required
+        />
+        <label for="content">글 내용</label>
+        <textarea
+          type="text"
+          id="content"
+          name="content"
+          placeholder="글 내용을 입력하세요"
+          rows="20"
+          cols="100"
+          class="px-[20px] py-[5px]"
+          required
+        ></textarea>
+        <button
+          type="submit"
+          id="submit"
+          class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
+        >
+          등 록
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+      rel="stylesheet"
+    />
+    <title>OurDev</title>
+    <style>
+      * {
+        font-family: 'Jua', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bg-[#012355]/90 px-[100px] pt-[50px] pb-[20px] text-white">
+      <div class="flex justify-between">
+        <h1>
+          <a class="text-[40px] font-bold" href="/">OurDev</a>
+        </h1>
+        <div>
+          <p><a class="text-[30px] font-bold" href="#">About</a></p>
+        </div>
+      </div>
+      <div class="flex flex-col items-center pt-[120px]">
+        <p class="text-[70px]" th:text="|${board.name} 게시판|">"팁 게시판"</p>
+      </div>
+      <div class="flex justify-center mt-[100px]">
+        <div
+          class="flex justify-center items-center bg-white w-[170px] h-[50px] rounded-xl hover:bg-black"
+        >
+          <a
+            class="text-[30px] text-[#012355]/90 hover:text-white"
+            href="/board/post"
+            th:href="@{/board/{id}/post/new(id=${board.id})}"
+            >New Post</a
+          >
+        </div>
+      </div>
+      <form class="w-[100%] flex justify-end items-end">
+        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" id="author-delete" placeholder="이름을 입력하세요.">
+        <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">게시판 삭제</button>
+        <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">삭제 확인</button>
+      </form>
+      <form class="w-[100%] flex justify-end items-end mt-[20px]">
+        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" id="author-update" placeholder="이름을 입력하세요.">
+        <input class="text-[15px] w-[150px] h-[35px] text-center text-[black] focus:outline-none hidden" type="text" name="author" id="new-name" placeholder="새로운 게시판 이름">
+        <a class="flex justify-center items-center text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]" th:href="@{/board/{id}/update(id=${board.id})}"><span>게시판 수정</span></a>
+      </form>
+    </header>
+    <main class="flex flex-col justify-between px-[200px] mt-[80px]">
+      <div class="flex flex-col w-[1230px]">
+        <div
+          class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] text-[25px] text-center"
+        >
+          <p class="w-[86px]">번호</p>
+          <p class="w-[897px]">제목</p>
+          <p class="w-[247px]">작성자</p>
+        </div>
+        <div class="flex flex-col w-[1230px]">
+          <a
+              class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] border-2 border-solid border-black rounded-2xl text-[25px] text-center"
+              href="post.html"
+              th:each="post: ${posts}"
+              th:href="@{/board/{boardId}/post/{postId}(boardId=${board.id}, postId=${post.id})}"
+          >
+            <p class="w-[86px]" th:text="${postStat.index + 1}">2</p>
+            <p class="w-[897px]" th:text="${post.title}">Spring Data Jpa 사용법</p>
+            <p class="w-[247px]" th:text="${post.author}">Kim</p>
+          </a>
+        </div>
+      </div>
+    </main>
+    <script>
+      let inputs = document.getElementsByTagName("input");
+      let buttons = document.getElementsByTagName("button");
+
+      buttons[0].addEventListener("click", (e) => {
+        e.preventDefault();
+        inputs[0].style.display = "block";
+        buttons[0].style.display = "none";
+        buttons[1].style.display = "block";
+      });
+
+      buttons[1].addEventListener("click", (e) => {
+        e.preventDefault();
+
+        let author = document.getElementById("author-delete").value;
+        fetch(location.href, {
+          method: "Delete",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            author: author,
+          }),
+        })
+        .then(res => {
+          if (res.ok) {
+            alert("삭제 되었습니다");
+            window.location.href = "http://localhost:8080/board";
+          } else {
+            alert("게시판 주인만 삭제가 가능합니다. 이름을 확인해주세요");
+          }
+        })
+      });
+    </script>
+  </body>
+</html>
