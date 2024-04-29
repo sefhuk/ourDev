@@ -1,10 +1,12 @@
 package hyuk.ourDev.domain.post.controller;
 
-import hyuk.ourDev.domain.board.service.BoardService;
+import hyuk.ourDev.domain.comment.entity.Comment;
+import hyuk.ourDev.domain.comment.service.CommentService;
 import hyuk.ourDev.domain.post.dto.PostRequestDto;
 import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.mapper.PostMapper;
 import hyuk.ourDev.domain.post.service.PostService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostController {
 
     private final PostService postService;
-    private final BoardService boardService;
+    private final CommentService commentService;
     private final PostMapper mapper;
 
     @GetMapping("/post/{id}")
@@ -35,9 +37,12 @@ public class PostController {
             throw new RuntimeException();
         }
 
+        List<Comment> comments = commentService.findComments(postId);
+
         model.addAttribute("post", mapper.PostToPostResponseDto(post));
         model.addAttribute("boardId", boardId);
         model.addAttribute("postId", postId);
+        model.addAttribute("comments", comments);
 
         return "post";
     }
