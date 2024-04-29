@@ -60,15 +60,14 @@
 
       <div class="flex flex-col items-start w-11/12 pt-[20px] border-t-2">
         <p class="text-[50px] mb-[30px]">Comment</p>
-        <form action="/" method="post" class="flex flex-col mb-[50px]">
+        <form th:action="@{/comment(postId=${postId}, boardId=${boardId})}" method="post" class="flex flex-col mb-[50px]">
           <input
             type="text"
-            name="name"
+            name="author"
             placeholder="이름을 입력해주세요"
             class="border-[1px] border-black mb-[10px] px-[20px] py-[10px]"
           />
           <textarea
-            type="text"
             name="content"
             placeholder="댓글 내용을 입력해주세요"
             rows="4"
@@ -83,10 +82,10 @@
           </button>
         </form>
 
-        <div>
-          <div>
-            <p class="text-[25px]">댓글 작성자 1</p>
-            <p>댓글 내용1</p>
+        <div th:each="comment: ${comments}">
+          <div class="my-[20px]">
+            <p class="text-[25px] mb-[10px]" th:text="|댓글 작성자: ${comment.author}|">댓글 작성자 1</p>
+            <p class="pl-[50px]" th:text="${comment.content}">댓글 내용1</p>
           </div>
         </div>
       </div>
