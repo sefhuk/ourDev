@@ -1,103 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
-      rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+        rel="stylesheet"
     />
     <title>OurDev</title>
     <style>
-      * {
-        font-family: 'Jua', sans-serif;
-        font-weight: 400;
-        font-style: normal;
-      }
+        * {
+            font-family: 'Jua', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
 
-      input {
-        height: 40px;
-      }
+        input {
+            height: 40px;
+        }
 
-      input:focus,
-      textarea:focus {
-        outline: none;
-      }
+        input:focus,
+        textarea:focus {
+            outline: none;
+        }
     </style>
-  </head>
-  <body class="pb-[200px]">
-    <header class="h-[130px] bg-[#012355]/90 px-[100px] pt-[50px] text-white">
-      <div class="flex justify-between">
+</head>
+<body class="pb-[200px]">
+<header class="h-[130px] bg-[#012355]/90 px-[100px] pt-[50px] text-white">
+    <div class="flex justify-between">
         <h1>
-          <a class="text-[40px] font-bold" th:href="@{/}">OurDev</a>
+            <a class="text-[40px] font-bold" th:href="@{/}">OurDev</a>
         </h1>
         <div>
-          <p><a class="text-[30px] font-bold" href="#">About</a></p>
+            <p><a class="text-[30px] font-bold" href="#">About</a></p>
         </div>
-      </div>
-    </header>
-    <main
-      class="flex flex-col justify-center items-center px-[200px] mt-[80px]"
-    >
-      <p class="text-[50px] mb-[50px]" th:text="${post.title}">[Tip] Spring Data Jpa 사용법</p>
-      <p class="text-[30px] mb-[30px]" th:text="|작성자: ${post.author}|">작성자 : Kim</p>
+    </div>
+</header>
+<main
+    class="flex flex-col justify-center items-center px-[200px] mt-[80px]"
+>
+    <p class="text-[50px] mb-[50px]" th:text="${post.title}">[Tip] Spring Data Jpa 사용법</p>
+    <p class="text-[30px] mb-[30px]" th:text="|작성자: ${post.author}|">작성자 : Kim</p>
 
-      <form class="w-[100%] flex justify-end items-end text-white" th:method="delete" th:action="@{/board/{boardId}/post/{postId}(boardId=${boardId}, postId=${postId})}">
-        <button type="submit" class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">게시글 삭제</button>
-        <button class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">삭제 확인</button>
-      </form>
-      <div class="w-[100%] flex justify-end items-end text-white mt-[20px] mb-[50px]">
-        <a class="flex justify-center items-center text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]" th:href="@{/board/{boardId}/post/{postId}/update(boardId=${boardId}, postId=${postId}, title=${post.title}, content=${post.content}, author=${post.author})}"><span>게시글 수정</span></a>
-      </div>
-      <p class="w-[80%] text-[20px] mb-[40px] text-left" th:text="${post.content}">
-        dfdsafsafsadddddddddddddddddddddddddddddddddddddddddddddd<br />dfdddddddddd
-        fdddddddddd dddddddddddddddddddddddddddddddddddddddddddddd<br />bb
-      </p>
+    <form class="w-[100%] flex justify-end items-end text-white" th:method="delete"
+          th:action="@{/board/{boardId}/post/{postId}(boardId=${boardId}, postId=${postId})}">
+        <button type="submit"
+                class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">
+            게시글 삭제
+        </button>
+        <button
+            class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">
+            삭제 확인
+        </button>
+    </form>
+    <div class="w-[100%] flex justify-end items-end text-white mt-[20px] mb-[50px]">
+        <a class="flex justify-center items-center text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
+           th:href="@{/board/{boardId}/post/{postId}/update(boardId=${boardId}, postId=${postId}, title=${post.title}, content=${post.content}, author=${post.author})}"><span>게시글 수정</span></a>
+    </div>
+    <p class="w-[80%] text-[20px] mb-[40px] text-left" th:text="${post.content}">
+        dfdsafsafsadddddddddddddddddddddddddddddddddddddddddddddd<br/>dfdddddddddd
+        fdddddddddd dddddddddddddddddddddddddddddddddddddddddddddd<br/>bb
+    </p>
 
-      <div class="flex flex-col items-start w-11/12 pt-[20px] border-t-2">
+    <div class="flex flex-col items-start w-11/12 pt-[20px] border-t-2">
         <p class="text-[50px] mb-[30px]">Comment</p>
-        <form th:action="@{/comment(postId=${postId}, boardId=${boardId})}" method="post" class="flex flex-col mb-[50px]">
-          <input
-            type="text"
-            name="author"
-            placeholder="이름을 입력해주세요"
-            class="border-[1px] border-black mb-[10px] px-[20px] py-[10px]"
-          />
-          <textarea
-            name="content"
-            placeholder="댓글 내용을 입력해주세요"
-            rows="4"
-            cols="100"
-            class="border-[1px] border-black px-[20px] py-[10px] mb-[10px]"
-          ></textarea>
-          <button
-            type="submit"
-            class="h-[50px] text-[25px] border-[1px] border-black hover:bg-black hover:text-white"
-          >
-            댓글 추가
-          </button>
+        <form th:action="@{/comment(postId=${postId}, boardId=${boardId})}" method="post"
+              class="flex flex-col border-b-2 border-black pb-[50px] mb-[50px]">
+            <input
+                type="text"
+                name="author"
+                placeholder="이름을 입력해주세요"
+                class="border-[1px] border-black mb-[10px] px-[20px] py-[10px]"
+                required
+            />
+            <textarea
+                name="content"
+                placeholder="댓글 내용을 입력해주세요"
+                rows="4"
+                cols="100"
+                class="border-[1px] border-black px-[20px] py-[10px] mb-[10px]"
+                required
+            ></textarea>
+            <button
+                type="submit"
+                class="h-[50px] text-[25px] border-[1px] border-black hover:bg-black hover:text-white"
+            >
+                댓글 추가
+            </button>
         </form>
 
-        <div th:each="comment: ${comments}">
-          <div class="my-[20px]">
-            <p class="text-[25px] mb-[10px]" th:text="|댓글 작성자: ${comment.author}|">댓글 작성자 1</p>
-            <p class="pl-[50px]" th:text="${comment.content}">댓글 내용1</p>
-          </div>
+        <div class="comments flex justify-between w-[100%] border-b-2 border-[gray] mb-[40px]"
+             th:each="comment: ${comments}">
+            <div class="my-[20px]">
+                <p class="text-[25px] mb-[10px]" th:text="|댓글 작성자: ${comment.author}|">댓글 작성자 1</p>
+                <p class="pl-[50px]" th:text="${comment.content}">댓글 내용1</p>
+            </div>
+            <div class="flex flex-col justify-center items-end w-[300px]">
+                <button
+                    class="text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
+                    type="submit">삭제
+                </button>
+                <button
+                    class="edit-btn text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
+                    type="submit">수정
+                </button>
+            </div>
+            <form method="post"
+                  th:action="@{/comment/edit(boardId=${boardId}, postId=${postId}, commentId=${comment.id})}"
+                  class="edit-form flex flex-col mb-[50px] hidden">
+                <input
+                    type="text"
+                    name="author"
+                    placeholder="이름을 입력해주세요"
+                    class="border-[1px] border-black mb-[10px] px-[20px] py-[10px]"
+                    th:value="${comment.author}"
+                />
+                <textarea
+                    name="content"
+                    placeholder="댓글 내용을 입력해주세요"
+                    rows="4"
+                    cols="100"
+                    class="border-[1px] border-black px-[20px] py-[10px] mb-[10px]"
+                    th:text="${comment.content}"
+                ></textarea>
+                <button
+                    type="submit"
+                    class="w-11/12 h-[50px] text-[25px] border-[1px] border-black hover:bg-black hover:text-white"
+                >
+                    댓글 수정
+                </button>
+            </form>
         </div>
-      </div>
-    </main>
-    <script>
-      let buttons = document.getElementsByTagName("button");
+    </div>
+</main>
+<script>
+    let buttons = document.getElementsByTagName("button");
+    let comments = document.getElementsByClassName("comments");
+    let editForms = document.getElementsByClassName("edit-form");
+    let editBtns = document.getElementsByClassName("edit-btn");
 
-      buttons[0].addEventListener("click", (e) => {
+    buttons[0].addEventListener("click", (e) => {
         e.preventDefault();
         buttons[0].style.display = "none";
         buttons[1].style.display = "block";
-      })
-    </script>
-  </body>
+    })
+
+    for (let i = 0; i < editBtns.length; i++) {
+        editBtns[i].addEventListener("click", () => {
+            comments[i].getElementsByTagName("div")[0].style.display = "none";
+            comments[i].getElementsByTagName("div")[1].style.display = "none";
+            editForms[i].style.display = "block";
+        });
+    }
+</script>
+</body>
 </html>

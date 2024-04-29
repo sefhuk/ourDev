@@ -18,7 +18,19 @@ public class CommentService {
         return commentRepository.findAllByPostId(postID);
     }
 
-    public Comment addComment(Comment comment) {
-        return commentRepository.save(comment);
+    public void addComment(Comment comment) {
+        commentRepository.save(comment);
+    }
+
+    public void modifyComment(Long commentId, String author, String content) {
+        Comment findComment = commentRepository.findById(commentId).orElse(null);
+
+        if (findComment == null) {
+            throw new RuntimeException();
+        }
+
+        findComment.updateComment(author, content);
+
+        commentRepository.save(findComment);
     }
 }
