@@ -21,4 +21,16 @@ public class CommentService {
     public Comment addComment(Comment comment) {
         return commentRepository.save(comment);
     }
+
+    public void modifyComment(Long commentId, String author, String content) {
+        Comment findComment = commentRepository.findById(commentId).orElse(null);
+
+        if (findComment == null) {
+            throw new RuntimeException();
+        }
+
+        findComment.updateComment(author, content);
+
+        commentRepository.save(findComment);
+    }
 }

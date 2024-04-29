@@ -33,4 +33,14 @@ public class CommentController {
 
         return "redirect:/board/" + boardId + "/post/" + postId;
     }
+
+    @PostMapping("/edit")
+    public String commendModify(@RequestParam MultiValueMap<String, String> formData,
+        @RequestParam("boardId") Long boardId, @RequestParam("postId") Long postId,
+        @RequestParam("commentId") Long commentId) {
+        commentService.modifyComment(commentId, formData.getFirst("author"),
+            formData.getFirst("content"));
+
+        return "redirect:/board/" + boardId + "/post/" + postId;
+    }
 }
