@@ -37,7 +37,7 @@ public class Board {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board")
     private List<Post> posts = new ArrayList<>();
 
     @Builder
