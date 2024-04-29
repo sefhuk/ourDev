@@ -31,6 +31,6 @@ public class CommentController {
         comment.setPost(post);
         commentService.addComment(comment);
 
-        return "redirect:/board" + boardId + "/post/" + postId;
+        return "redirect:/board/" + boardId + "/post/" + postId;
     }
 }
