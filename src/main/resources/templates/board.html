@@ -76,7 +76,7 @@
           </a>
         </div>
       </div>
-      <div class="flex justify-evenly items-center w-[100%] my-[20px]">
+      <div class="flex justify-evenly items-center w-[100%] my-[20px]" th:if="${!posts.isEmpty()}">
         <a th:each="page: ${#numbers.sequence(1, pageSize)}" class="flex justify-center items-center w-[40px] h-[40px] text-bold border-2 border-[black] hover:text-[white] hover:bg-[black]" th:href="@{/board/{boardId}(boardId=${board.id}, size=${sizeNum}, page=${page - 1})}">
           <span class="text-[20px]" th:text="${page}"></span>
         </a>
