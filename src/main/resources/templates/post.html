@@ -97,13 +97,14 @@
             </div>
             <div class="flex flex-col mb-[50px] hidden edit-form">
                 <input
+                    id="edit-author"
                     type="text"
                     name="author"
                     placeholder="이름을 입력해주세요"
                     class="border-[1px] border-black mb-[10px] px-[20px] py-[10px]"
-                    th:value="${comment.author}"
                 />
                 <textarea
+                    id="edit-content"
                     name="content"
                     placeholder="댓글 내용을 입력해주세요"
                     rows="4"
@@ -113,14 +114,15 @@
                 ></textarea>
                 <button
                     type="submit"
-                    class="w-11/12 h-[50px] text-[25px] border-[1px] border-black hover:bg-black hover:text-white"
+                    class="edit-submit w-11/12 h-[50px] text-[25px] border-[1px] border-black hover:bg-black hover:text-white"
+                    th:onclick="editRequest(event, [[${comment.id}]])"
                 >
                     댓글 수정
                 </button>
             </div>
             <div class="flex flex-col justify-center items-end w-[300px]">
                 <button
-                    class="delete-btn text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
+                    class="text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
                     type="submit"
                     th:onclick="deleteRequest(event, [[${comment.id}]], [[${comment.content}]])">
                 삭제
@@ -134,10 +136,9 @@
     </div>
 </main>
 <script>
-    let buttons = document.getElementsByTagName("button");
-    let comments = document.getElementsByClassName("comments");
     let editForms = document.getElementsByClassName("edit-form");
     let editBtns = document.getElementsByClassName("edit-btn");
+    let commentForms = document.getElementsByClassName("comment-form");
 
     let deleteRequest = (e, commentId, content) => {
       e.preventDefault();
@@ -166,19 +167,36 @@
       )
     };
 
-    buttons[0].addEventListener("click", (e) => {
-        e.preventDefault();
-        buttons[0].classList.add("hidden");
-        buttons[1].classList.remove("hidden");
-    })
+    let editRequest = (e, commentId) => {
+      e.preventDefault();
+
+      fetch(`http://localhost:8080/comment`, {
+        method: "PATCH",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          commentId: commentId,
+          author: document.getElementById("edit-author").value,
+          content: document.getElementById("edit-content").value,
+        }),
+      }).then(
+          res => {
+            if (!res.ok) {
+              alert("댓글 작성자만 수정이 가능합니다. 이름을 확인 해주세요.");
+            } else {
+              alert("수정 되었습니다.");
+              window.location.href = location.href;
+            }
+          }
+      )
+    };
 
     for (let i = 0; i < editBtns.length; i++) {
-        editBtns[i].addEventListener("click", () => {
-            comments[i].getElementsByTagName("div")[0].classList.add("hidden");
-            comments[i].getElementsByTagName("div")[2].classList.add("hidden");
-            comments[i].getElementsByTagName("form")[0].classList.add("hidden");
-            editForms[i].classList.remove("hidden");
-        });
+      editBtns[i].addEventListener("click", () => {
+        commentForms[i].classList.add("hidden");
+        editForms[i].classList.remove("hidden");
+      });
     }
 </script>
 </body>
