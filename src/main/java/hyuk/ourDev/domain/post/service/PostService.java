@@ -9,7 +9,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class PostService {
         return postRepository.findById(postId).orElse(null);
     }
 
-    public Post addPost(Long boardId, Post post) {
+    public void addPost(Long boardId, Post post) {
 
         Optional<Board> findBoard = boardJdbcTemplateRepository.findById(boardId);
 
@@ -33,7 +32,7 @@ public class PostService {
 
         post.setBoard(findBoard.get());
 
-        return postRepository.save(post);
+        postRepository.save(post);
     }
 
     public void modifyPost(Long postId, PostRequestDto postRequestDto) {

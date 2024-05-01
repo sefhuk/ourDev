@@ -1,6 +1,5 @@
 package hyuk.ourDev.domain.post.dto;
 
-import hyuk.ourDev.domain.board.entity.Board;
 import lombok.Builder;
 import lombok.Data;
 

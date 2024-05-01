@@ -1,7 +1,6 @@
 package hyuk.ourDev.domain.board.entity;
 
 import hyuk.ourDev.domain.post.entity.Post;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +20,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Board {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

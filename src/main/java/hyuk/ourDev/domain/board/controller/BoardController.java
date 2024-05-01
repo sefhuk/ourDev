@@ -66,7 +66,7 @@ public class BoardController {
         model.addAttribute("posts", responsePosts);
         model.addAttribute("sizeNum", size);
         model.addAttribute("pageNum", page);
-        model.addAttribute("pageSize", Math.ceil((float ) postSize / size));
+        model.addAttribute("pageSize", Math.ceil((float) postSize / size));
         return "board";
     }
 
