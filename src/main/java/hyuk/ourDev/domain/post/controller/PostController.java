@@ -7,6 +7,7 @@ import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.mapper.PostMapper;
 import hyuk.ourDev.domain.post.service.PostService;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -59,9 +60,15 @@ public class PostController {
         @RequestBody MultiValueMap<String, String> formData) {
         PostRequestDto request = PostRequestDto.builder().title(formData.getFirst("title"))
             .author(formData.getFirst("author"))
-            .content(formData.getFirst("content")).build();
+            .content(formData.getFirst("content"))
+            .password(Integer.parseInt(formData.getFirst("password"))).build();
+
+        System.out.println("===============" + request.getPassword() + "\n");
+
 
         Post requestPost = mapper.PostRequestDtoToPost(request);
+
+        System.out.println("===============" + requestPost.getPassword() + "\n");
 
         Post post = postService.addPost(boardId, requestPost);
 
