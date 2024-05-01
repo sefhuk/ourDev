@@ -103,7 +103,7 @@
                 <button
                     class="delete-submit text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] hidden"
                     type="submit"
-                    th:onclick="deleteRequest(event, [[${comment.id}]], [[${boardId}]], [[${postId}]])">
+                    th:onclick="deleteRequest(event, [[${comment.id}]])">
                 삭제 확인
                 </button>
                 <button
@@ -147,8 +147,8 @@
     let deleteBtns = document.getElementsByClassName("delete-btn");
     let deleteSubmits = document.getElementsByClassName("delete-submit");
 
-    let deleteRequest = (e, commentId, boardId, postId) => {
-        fetch(`http://localhost:8080/comment?boardId=${boardId}&postId=${postId}`, {
+    let deleteRequest = (e, commentId) => {
+        fetch(`http://localhost:8080/comment`, {
             method: "Delete",
             headers: {
                 'Content-Type': 'application/json',
