@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -91,13 +92,18 @@ public class PostController {
         return "post_update";
     }
 
-    @PostMapping("/post/{postId}")
-    public String postModify(@PathVariable("board_id") Long boardId,
-        @PathVariable("postId") Long postId,
-        @RequestBody MultiValueMap<String, String> formData) {
-        postService.modifyPost(postId, formData);
+    @PatchMapping("/post/{postId}")
+    public ResponseEntity<Void> postModify(@RequestBody PostRequestDto postRequestDto,
+        @PathVariable("postId") Long postId) {
+        Post post = postService.findPost(postId);
 
-        return "redirect:/board/" + boardId + "/post/" + postId;
+        if (!Objects.equals(post.getPassword(), postRequestDto.getPassword())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+        postService.modifyPost(postId, postRequestDto);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/post/{postId}")
