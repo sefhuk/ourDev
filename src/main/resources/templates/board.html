@@ -56,24 +56,24 @@
       </form>
     </header>
     <main class="flex flex-col justify-between px-[200px] mt-[80px]">
-      <div class="flex flex-col w-[1230px]">
+      <div class="flex flex-col items-center w-[95%]">
         <div
           class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] text-[25px] text-center"
         >
-          <p class="w-[86px]">번호</p>
-          <p class="w-[897px]">제목</p>
-          <p class="w-[247px]">작성자</p>
+          <p class="w-[5%]">번호</p>
+          <p class="w-[85%]">제목</p>
+          <p class="w-[10%]">작성자</p>
         </div>
-        <div class="flex flex-col w-[1230px]">
+        <div class="flex flex-col w-[100%]">
           <a
               class="flex justify-between items-center w-[100%] h-[80px] mb-[20px] border-2 border-solid border-black rounded-2xl text-[25px] text-center"
               href="post.html"
               th:each="post: ${posts}"
               th:href="@{/board/{boardId}/post/{postId}(boardId=${board.id}, postId=${post.id})}"
           >
-            <p class="w-[86px]" th:text="${postStat.index + 1}">2</p>
-            <p class="w-[897px]" th:text="${post.title}">Spring Data Jpa 사용법</p>
-            <p class="w-[247px]" th:text="${post.author}">Kim</p>
+            <p class="w-[5%]" th:text="${postStat.index + 1}">2</p>
+            <p class="w-[85%]" th:text="${post.title}">Spring Data Jpa 사용법</p>
+            <p class="w-[10%]" th:text="${post.author}">Kim</p>
           </a>
         </div>
       </div>
