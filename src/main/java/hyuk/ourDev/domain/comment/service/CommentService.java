@@ -2,7 +2,7 @@ package hyuk.ourDev.domain.comment.service;
 
 import hyuk.ourDev.domain.comment.entity.Comment;
 import hyuk.ourDev.domain.comment.repository.CommentRepository;
-import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +14,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public List<Comment> findComments(Long postID) {
-        return commentRepository.findAllByPostId(postID);
+    public Comment findComment(Long commentId) {
+        return commentRepository.findById(commentId).orElse(null);
     }
 
     public void addComment(Comment comment) {
@@ -32,5 +32,9 @@ public class CommentService {
         findComment.updateComment(author, content);
 
         commentRepository.save(findComment);
+    }
+
+    public void removeComment(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }

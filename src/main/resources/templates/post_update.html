@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
-      rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+        rel="stylesheet"
     />
     <style>
       * {
@@ -32,42 +32,78 @@
       }
     </style>
     <title>OurDev</title>
-  </head>
-  <body class="bg-[skyblue]">
-    <div class="flex flex-col pt-[100px]">
-      <h1 class="text-center text-[50px]">게시글 수정</h1>
-      <form class="flex flex-col px-[200px]" method="post" th:action="@{/board/{boardId}/post/{postId}(boardId=${boardId}, postId=${postId})}">
+</head>
+<body class="bg-[skyblue]">
+<div class="flex flex-col pt-[100px]">
+    <h1 class="text-center text-[50px]">게시글 수정</h1>
+    <div class="flex flex-col px-[200px]">
         <label for="title">글 제목</label>
         <input
-          type="text"
-          id="title"
-          name="title"
-          placeholder="글 제목을 입력하세요"
-          class="px-[20px] py-[5px]"
-          value="${title}"
-          th:value="${title}"
-          required
+            type="text"
+            id="title"
+            name="title"
+            placeholder="글 제목을 입력하세요"
+            class="px-[20px] py-[5px]"
+            value="${title}"
+            th:value="${title}"
+            required
         />
         <label for="content">글 내용</label>
         <textarea
-          id="content"
-          name="content"
-          placeholder="글 내용을 입력하세요"
-          rows="20"
-          cols="100"
-          class="px-[20px] py-[5px]"
-          th:text="${content}"
-          required
+            id="content"
+            name="content"
+            placeholder="글 내용을 입력하세요"
+            rows="20"
+            cols="100"
+            class="px-[20px] py-[5px]"
+            th:text="${content}"
+            required
         ></textarea>
-        <input type="hidden" th:value="${author}" name="author">
+        <label for="title">암호</label>
+        <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="암호를 입력하세요"
+            class="px-[20px] py-[5px]"
+            maxlength="4"
+            required
+        />
         <button
-          type="submit"
-          id="submit"
-          class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
+            type="submit"
+            id="submit"
+            class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
+            th:onclick="editPost(event, [[${boardId}]], [[${postId}]])"
         >
-          수 정
+            수 정
         </button>
-      </form>
     </div>
-  </body>
+</div>
+</body>
+<script>
+  const editPost = (e, boardId, postId) => {
+    e.preventDefault();
+
+    fetch(`/board/${boardId}/post/${postId}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: document.getElementById("title").value,
+        content: document.getElementById("content").value,
+        password: document.getElementById("password").value,
+      }),
+    }).then(
+        res => {
+          if (!res.ok) {
+            alert("암호가 일치하지 않습니다.");
+          } else {
+            alert("수정 되었습니다.");
+            window.location.href = `/board/${boardId}/post/${postId}`;
+          }
+        }
+    )
+  };
+</script>
 </html>

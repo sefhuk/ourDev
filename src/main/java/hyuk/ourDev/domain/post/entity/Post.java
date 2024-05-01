@@ -34,22 +34,27 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    @Column(nullable = false, length = 4)
+    private Integer password;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Post(Long id, String title, String author, String content, Board board) {
+    public Post(Long id, String title, String author, String content, Integer password,
+        Board board) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.content = content;
+        this.password = password;
         this.board = board;
     }
 

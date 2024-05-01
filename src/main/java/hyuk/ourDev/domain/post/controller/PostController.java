@@ -1,18 +1,21 @@
 package hyuk.ourDev.domain.post.controller;
 
 import hyuk.ourDev.domain.comment.entity.Comment;
-import hyuk.ourDev.domain.comment.service.CommentService;
 import hyuk.ourDev.domain.post.dto.PostRequestDto;
 import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.mapper.PostMapper;
 import hyuk.ourDev.domain.post.service.PostService;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostController {
 
     private final PostService postService;
-    private final CommentService commentService;
     private final PostMapper mapper;
 
     @GetMapping("/post/{id}")
@@ -37,7 +39,7 @@ public class PostController {
             throw new RuntimeException();
         }
 
-        List<Comment> comments = commentService.findComments(postId);
+        List<Comment> comments = post.getComments();
 
         model.addAttribute("post", mapper.PostToPostResponseDto(post));
         model.addAttribute("boardId", boardId);
@@ -58,11 +60,12 @@ public class PostController {
         @RequestBody MultiValueMap<String, String> formData) {
         PostRequestDto request = PostRequestDto.builder().title(formData.getFirst("title"))
             .author(formData.getFirst("author"))
-            .content(formData.getFirst("content")).build();
+            .content(formData.getFirst("content"))
+            .password(Integer.parseInt(Objects.requireNonNull(formData.getFirst("password")))).build();
 
         Post requestPost = mapper.PostRequestDtoToPost(request);
 
-        Post post = postService.addPost(boardId, requestPost);
+        postService.addPost(boardId, requestPost);
 
         return "redirect:/board/" + boardId;
     }
@@ -82,20 +85,31 @@ public class PostController {
         return "post_update";
     }
 
-    @PostMapping("/post/{postId}")
-    public String postModify(@PathVariable("board_id") Long boardId,
-        @PathVariable("postId") Long postId,
-        @RequestBody MultiValueMap<String, String> formData) {
-        postService.modifyPost(postId, formData);
+    @PatchMapping("/post/{postId}")
+    public ResponseEntity<Void> postModify(@RequestBody PostRequestDto postRequestDto,
+        @PathVariable("postId") Long postId) {
+        Post post = postService.findPost(postId);
 
-        return "redirect:/board/" + boardId + "/post/" + postId;
+        if (!Objects.equals(post.getPassword(), postRequestDto.getPassword())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+        postService.modifyPost(postId, postRequestDto);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/post/{postId}")
-    public String postRemove(@PathVariable("board_id") Long boardId,
-        @PathVariable("postId") Long postId) {
+    public ResponseEntity<Void> postRemove(@RequestBody PostRequestDto postRequestDto,
+        @PathVariable Long postId) {
+        Post post = postService.findPost(postId);
+
+        if (!Objects.equals(post.getPassword(), postRequestDto.getPassword())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
         postService.removePost(postId);
 
-        return "redirect:/board/" + boardId;
+        return ResponseEntity.ok().build();
     }
 }

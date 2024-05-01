@@ -35,8 +35,8 @@ public class BoardService {
         return jdbcTemplateRepository.save(board);
     }
 
-    public Board modifyBoard(Board board) {
-        return jdbcTemplateRepository.save(board);
+    public void modifyBoard(Board board) {
+        jdbcTemplateRepository.save(board);
     }
 
     public void removeBoard(Long id, String author) {

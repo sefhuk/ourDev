@@ -13,20 +13,20 @@
     />
     <title>OurDev</title>
     <style>
-        * {
-            font-family: 'Jua', sans-serif;
-            font-weight: 400;
-            font-style: normal;
-        }
+      * {
+        font-family: 'Jua', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
 
-        input {
-            height: 40px;
-        }
+      input {
+        height: 40px;
+      }
 
-        input:focus,
-        textarea:focus {
-            outline: none;
-        }
+      input:focus,
+      textarea:focus {
+        outline: none;
+      }
     </style>
 </head>
 <body class="pb-[200px]">
@@ -46,27 +46,19 @@
     <p class="text-[50px] mb-[50px]" th:text="${post.title}">[Tip] Spring Data Jpa 사용법</p>
     <p class="text-[30px] mb-[30px]" th:text="|작성자: ${post.author}|">작성자 : Kim</p>
 
-    <form class="w-[100%] flex justify-end items-end text-white" th:method="delete"
-          th:action="@{/board/{boardId}/post/{postId}(boardId=${boardId}, postId=${postId})}">
+    <div class="w-[100%] flex justify-end items-end text-white">
         <button type="submit"
-                class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">
+                class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
+                th:onclick="deletePost(event, [[${postId}]], [[${boardId}]])">
             게시글 삭제
         </button>
-        <button
-            class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">
-            삭제 확인
-        </button>
-    </form>
+    </div>
     <div class="w-[100%] flex justify-end items-end text-white mt-[20px] mb-[50px]">
         <a class="flex justify-center items-center text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
            th:href="@{/board/{boardId}/post/{postId}/update(boardId=${boardId}, postId=${postId}, title=${post.title}, content=${post.content}, author=${post.author})}"><span>게시글 수정</span></a>
     </div>
-    <p class="w-[80%] text-[20px] mb-[40px] text-left" th:text="${post.content}">
-        dfdsafsafsadddddddddddddddddddddddddddddddddddddddddddddd<br/>dfdddddddddd
-        fdddddddddd dddddddddddddddddddddddddddddddddddddddddddddd<br/>bb
-    </p>
-
-    <div class="flex flex-col items-start w-11/12 pt-[20px] border-t-2">
+    <p class="w-[80%] text-[20px] mb-[40px] text-left whitespace-pre" th:text="${post.content}"></p>
+    <div class="flex flex-col items-start w-[95%] pt-[20px] border-t-2">
         <p class="text-[50px] mb-[30px]">Comment</p>
         <form th:action="@{/comment(postId=${postId}, boardId=${boardId})}" method="post"
               class="flex flex-col border-b-2 border-black pb-[50px] mb-[50px]">
@@ -95,31 +87,21 @@
 
         <div class="comments flex justify-between w-[100%] border-b-2 border-[gray] mb-[40px]"
              th:each="comment: ${comments}">
-            <div class="my-[20px]">
-                <p class="text-[25px] mb-[10px]" th:text="|댓글 작성자: ${comment.author}|">댓글 작성자 1</p>
-                <p class="pl-[50px]" th:text="${comment.content}">댓글 내용1</p>
+            <div class="my-[20px] flex flex-col comment-form">
+                <div class="text-[25px] mb-[10px]"
+                     th:text="|댓글 작성자 ${commentStat.index + 1}|"></div>
+                <div class="ml-[50px] whitespace-pre" th:text="${comment.content}"></div>
             </div>
-            <div class="flex flex-col justify-center items-end w-[300px]">
-                <button
-                    class="text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
-                    type="submit">삭제
-                </button>
-                <button
-                    class="edit-btn text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
-                    type="submit">수정
-                </button>
-            </div>
-            <form method="post"
-                  th:action="@{/comment/edit(boardId=${boardId}, postId=${postId}, commentId=${comment.id})}"
-                  class="edit-form flex flex-col mb-[50px] hidden">
+            <div class="flex flex-col mb-[50px] hidden edit-form">
                 <input
+                    id="edit-author"
                     type="text"
                     name="author"
                     placeholder="이름을 입력해주세요"
                     class="border-[1px] border-black mb-[10px] px-[20px] py-[10px]"
-                    th:value="${comment.author}"
                 />
                 <textarea
+                    id="edit-content"
                     name="content"
                     placeholder="댓글 내용을 입력해주세요"
                     rows="4"
@@ -129,33 +111,116 @@
                 ></textarea>
                 <button
                     type="submit"
-                    class="w-11/12 h-[50px] text-[25px] border-[1px] border-black hover:bg-black hover:text-white"
+                    class="edit-submit w-11/12 h-[50px] text-[25px] border-[1px] border-black hover:bg-black hover:text-white"
+                    th:onclick="editComment(event, [[${comment.id}]])"
                 >
                     댓글 수정
                 </button>
-            </form>
+            </div>
+            <div class="flex flex-col justify-center items-end w-[300px]">
+                <button
+                    class="text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
+                    type="submit"
+                    th:onclick="deleteComment(event, [[${comment.id}]], [[${comment.content}]])">
+                    삭제
+                </button>
+                <button
+                    class="edit-btn text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
+                    type="submit">수정
+                </button>
+            </div>
         </div>
     </div>
 </main>
 <script>
-    let buttons = document.getElementsByTagName("button");
-    let comments = document.getElementsByClassName("comments");
-    let editForms = document.getElementsByClassName("edit-form");
-    let editBtns = document.getElementsByClassName("edit-btn");
+  let editForms = document.getElementsByClassName("edit-form");
+  let editBtns = document.getElementsByClassName("edit-btn");
+  let commentForms = document.getElementsByClassName("comment-form");
 
-    buttons[0].addEventListener("click", (e) => {
-        e.preventDefault();
-        buttons[0].style.display = "none";
-        buttons[1].style.display = "block";
-    })
+  let deletePost = (e, postId, boardId) => {
+    e.preventDefault();
 
-    for (let i = 0; i < editBtns.length; i++) {
-        editBtns[i].addEventListener("click", () => {
-            comments[i].getElementsByTagName("div")[0].style.display = "none";
-            comments[i].getElementsByTagName("div")[1].style.display = "none";
-            editForms[i].style.display = "block";
-        });
-    }
+    let password = prompt("게시글 암호를 확인합니다. 암호를 입력해주세요. (입력한 암호는 보이지 않습니다)", "");
+
+    fetch(location.href, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        postId: postId,
+        password: password,
+      }),
+    }).then(
+        res => {
+          if (!res.ok) {
+            alert("암호가 일치하지 않습니다.");
+          } else {
+            alert("삭제 되었습니다.");
+            window.location.href = `/board/${boardId}`;
+          }
+        }
+    )
+  };
+
+  let deleteComment = (e, commentId, content) => {
+    e.preventDefault();
+
+    let author = prompt("댓글 작성자를 확인합니다. 이름을 입력해주세요.")
+
+    fetch(`http://localhost:8080/comment`, {
+      method: "Delete",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commentId: commentId,
+        author: author,
+        content: content,
+      }),
+    }).then(
+        res => {
+          if (!res.ok) {
+            alert("댓글 작성자만 삭제가 가능합니다. 이름을 확인 해주세요.");
+          } else {
+            alert("삭제 되었습니다.");
+            window.location.href = location.href;
+          }
+        }
+    )
+  };
+
+  let editComment = (e, commentId) => {
+    e.preventDefault();
+
+    fetch(`http://localhost:8080/comment`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commentId: commentId,
+        author: document.getElementById("edit-author").value,
+        content: document.getElementById("edit-content").value,
+      }),
+    }).then(
+        res => {
+          if (!res.ok) {
+            alert("댓글 작성자만 수정이 가능합니다. 이름을 확인 해주세요.");
+          } else {
+            alert("수정 되었습니다.");
+            window.location.href = location.href;
+          }
+        }
+    )
+  };
+
+  for (let i = 0; i < editBtns.length; i++) {
+    editBtns[i].addEventListener("click", () => {
+      commentForms[i].classList.add("hidden");
+      editForms[i].classList.remove("hidden");
+    });
+  }
 </script>
 </body>
 </html>
