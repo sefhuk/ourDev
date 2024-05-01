@@ -56,6 +56,7 @@ public class BoardController {
     public String boardDetails(@RequestParam(defaultValue = "0") Integer page,
         @RequestParam(defaultValue = "5") Integer size, @PathVariable Long id, Model model) {
         Board board = boardService.findBoardPaging(id, page, size);
+        int postSize = boardService.findBoard(id).getPosts().size();
         BoardResponseDto responseBoard = boardMapper.boardToBoardResponseDto(board);
 
         List<PostResponseDto> responsePosts = responseBoard.getPosts().stream()
@@ -63,6 +64,9 @@ public class BoardController {
                 Collectors.toList());
         model.addAttribute("board", responseBoard);
         model.addAttribute("posts", responsePosts);
+        model.addAttribute("sizeNum", size);
+        model.addAttribute("pageNum", page);
+        model.addAttribute("pageSize", Math.ceil((float ) postSize / size));
         return "board";
     }
 
