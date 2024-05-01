@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -100,10 +101,16 @@ public class PostController {
     }
 
     @DeleteMapping("/post/{postId}")
-    public String postRemove(@PathVariable("board_id") Long boardId,
-        @PathVariable("postId") Long postId) {
+    public ResponseEntity<Void> postRemove(@RequestBody PostRequestDto postRequestDto,
+        @PathVariable Long postId) {
+        Post post = postService.findPost(postId);
+
+        if (!Objects.equals(post.getPassword(), postRequestDto.getPassword())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
         postService.removePost(postId);
 
-        return "redirect:/board/" + boardId;
+        return ResponseEntity.ok().build();
     }
 }
