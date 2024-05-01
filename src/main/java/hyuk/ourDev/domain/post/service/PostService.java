@@ -4,7 +4,6 @@ import hyuk.ourDev.domain.board.entity.Board;
 import hyuk.ourDev.domain.board.repository.BoardJdbcTemplateRepository;
 import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.repository.PostRepository;
-import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final BoardJdbcTemplateRepository boardJdbcTemplateRepository;
-    public final EntityManager entityManager;
 
     public Post findPost(Long postId) {
         return postRepository.findById(postId).orElse(null);
@@ -28,7 +26,7 @@ public class PostService {
 
         Optional<Board> findBoard = boardJdbcTemplateRepository.findById(boardId);
 
-        if (!findBoard.isPresent()) {
+        if (findBoard.isEmpty()) {
             throw new RuntimeException();
         }
 

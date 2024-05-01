@@ -8,6 +8,7 @@ import hyuk.ourDev.domain.post.mapper.PostMapper;
 import hyuk.ourDev.domain.post.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostController {
 
     private final PostService postService;
-    private final CommentService commentService;
     private final PostMapper mapper;
 
     @GetMapping("/post/{id}")
@@ -37,7 +38,7 @@ public class PostController {
             throw new RuntimeException();
         }
 
-        List<Comment> comments = commentService.findComments(postId);
+        List<Comment> comments = post.getComments();
 
         model.addAttribute("post", mapper.PostToPostResponseDto(post));
         model.addAttribute("boardId", boardId);
