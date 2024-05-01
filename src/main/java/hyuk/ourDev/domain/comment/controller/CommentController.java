@@ -1,19 +1,26 @@
 package hyuk.ourDev.domain.comment.controller;
 
+import hyuk.ourDev.domain.comment.dto.CommentRequest;
 import hyuk.ourDev.domain.comment.entity.Comment;
 import hyuk.ourDev.domain.comment.service.CommentService;
 import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/comment")
+@Slf4j
 public class CommentController {
 
     private final CommentService commentService;
@@ -42,5 +49,12 @@ public class CommentController {
             formData.getFirst("content"));
 
         return "redirect:/board/" + boardId + "/post/" + postId;
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> commentRemove(@RequestBody CommentRequest commentRequest) {
+
+        commentService.removeComment(Long.parseLong(commentRequest.getCommentId()));
+        return ResponseEntity.ok().build();
     }
 }
