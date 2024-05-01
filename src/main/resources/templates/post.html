@@ -46,17 +46,13 @@
     <p class="text-[50px] mb-[50px]" th:text="${post.title}">[Tip] Spring Data Jpa 사용법</p>
     <p class="text-[30px] mb-[30px]" th:text="|작성자: ${post.author}|">작성자 : Kim</p>
 
-    <form class="w-[100%] flex justify-end items-end text-white" th:method="delete"
-          th:action="@{/board/{boardId}/post/{postId}(boardId=${boardId}, postId=${postId})}">
+    <div class="w-[100%] flex justify-end items-end text-white">
         <button type="submit"
-                class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]">
+                class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
+                th:onclick="deletePost(event, [[${postId}]], [[${boardId}]])">
             게시글 삭제
         </button>
-        <button
-            class="text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black] hidden">
-            삭제 확인
-        </button>
-    </form>
+    </div>
     <div class="w-[100%] flex justify-end items-end text-white mt-[20px] mb-[50px]">
         <a class="flex justify-center items-center text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
            th:href="@{/board/{boardId}/post/{postId}/update(boardId=${boardId}, postId=${postId}, title=${post.title}, content=${post.content}, author=${post.author})}"><span>게시글 수정</span></a>
@@ -139,6 +135,32 @@
     let editForms = document.getElementsByClassName("edit-form");
     let editBtns = document.getElementsByClassName("edit-btn");
     let commentForms = document.getElementsByClassName("comment-form");
+
+    let deletePost = (e, postId, boardId) => {
+      e.preventDefault();
+
+      let password = prompt("게시글 암호를 확인합니다. 암호를 입력해주세요. (입력한 암호는 보이지 않습니다)", "");
+
+      fetch(location.href, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          postId: postId,
+          password: password,
+        }),
+      }).then(
+          res => {
+            if (!res.ok) {
+              alert("암호가 일치하지 않습니다.");
+            } else {
+              alert("삭제 되었습니다.");
+              window.location.href = `/board/${boardId}`;
+            }
+          }
+      )
+    };
 
     let deleteComment = (e, commentId, content) => {
       e.preventDefault();
