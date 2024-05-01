@@ -26,7 +26,7 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
