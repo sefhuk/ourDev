@@ -1,7 +1,6 @@
 package hyuk.ourDev.domain.post.controller;
 
 import hyuk.ourDev.domain.comment.entity.Comment;
-import hyuk.ourDev.domain.comment.service.CommentService;
 import hyuk.ourDev.domain.post.dto.PostRequestDto;
 import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.mapper.PostMapper;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequiredArgsConstructor
@@ -63,16 +61,11 @@ public class PostController {
         PostRequestDto request = PostRequestDto.builder().title(formData.getFirst("title"))
             .author(formData.getFirst("author"))
             .content(formData.getFirst("content"))
-            .password(Integer.parseInt(formData.getFirst("password"))).build();
-
-        System.out.println("===============" + request.getPassword() + "\n");
-
+            .password(Integer.parseInt(Objects.requireNonNull(formData.getFirst("password")))).build();
 
         Post requestPost = mapper.PostRequestDtoToPost(request);
 
-        System.out.println("===============" + requestPost.getPassword() + "\n");
-
-        Post post = postService.addPost(boardId, requestPost);
+        postService.addPost(boardId, requestPost);
 
         return "redirect:/board/" + boardId;
     }

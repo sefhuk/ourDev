@@ -13,20 +13,20 @@
     />
     <title>OurDev</title>
     <style>
-        * {
-            font-family: 'Jua', sans-serif;
-            font-weight: 400;
-            font-style: normal;
-        }
+      * {
+        font-family: 'Jua', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
 
-        input {
-            height: 40px;
-        }
+      input {
+        height: 40px;
+      }
 
-        input:focus,
-        textarea:focus {
-            outline: none;
-        }
+      input:focus,
+      textarea:focus {
+        outline: none;
+      }
     </style>
 </head>
 <body class="pb-[200px]">
@@ -86,9 +86,10 @@
         </form>
 
         <div class="comments flex justify-between w-[100%] border-b-2 border-[gray] mb-[40px]"
-             th:each="comment: ${comments}" >
+             th:each="comment: ${comments}">
             <div class="my-[20px] flex flex-col comment-form">
-                <div class="text-[25px] mb-[10px]" th:text="|댓글 작성자 ${commentStat.index + 1}|"></div>
+                <div class="text-[25px] mb-[10px]"
+                     th:text="|댓글 작성자 ${commentStat.index + 1}|"></div>
                 <div class="ml-[50px] whitespace-pre" th:text="${comment.content}"></div>
             </div>
             <div class="flex flex-col mb-[50px] hidden edit-form">
@@ -121,7 +122,7 @@
                     class="text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
                     type="submit"
                     th:onclick="deleteComment(event, [[${comment.id}]], [[${comment.content}]])">
-                삭제
+                    삭제
                 </button>
                 <button
                     class="edit-btn text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
@@ -132,94 +133,94 @@
     </div>
 </main>
 <script>
-    let editForms = document.getElementsByClassName("edit-form");
-    let editBtns = document.getElementsByClassName("edit-btn");
-    let commentForms = document.getElementsByClassName("comment-form");
+  let editForms = document.getElementsByClassName("edit-form");
+  let editBtns = document.getElementsByClassName("edit-btn");
+  let commentForms = document.getElementsByClassName("comment-form");
 
-    let deletePost = (e, postId, boardId) => {
-      e.preventDefault();
+  let deletePost = (e, postId, boardId) => {
+    e.preventDefault();
 
-      let password = prompt("게시글 암호를 확인합니다. 암호를 입력해주세요. (입력한 암호는 보이지 않습니다)", "");
+    let password = prompt("게시글 암호를 확인합니다. 암호를 입력해주세요. (입력한 암호는 보이지 않습니다)", "");
 
-      fetch(location.href, {
-        method: "DELETE",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          postId: postId,
-          password: password,
-        }),
-      }).then(
-          res => {
-            if (!res.ok) {
-              alert("암호가 일치하지 않습니다.");
-            } else {
-              alert("삭제 되었습니다.");
-              window.location.href = `/board/${boardId}`;
-            }
+    fetch(location.href, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        postId: postId,
+        password: password,
+      }),
+    }).then(
+        res => {
+          if (!res.ok) {
+            alert("암호가 일치하지 않습니다.");
+          } else {
+            alert("삭제 되었습니다.");
+            window.location.href = `/board/${boardId}`;
           }
-      )
-    };
+        }
+    )
+  };
 
-    let deleteComment = (e, commentId, content) => {
-      e.preventDefault();
+  let deleteComment = (e, commentId, content) => {
+    e.preventDefault();
 
-      let author = prompt("댓글 작성자를 확인합니다. 이름을 입력해주세요.")
+    let author = prompt("댓글 작성자를 확인합니다. 이름을 입력해주세요.")
 
-      fetch(`http://localhost:8080/comment`, {
-        method: "Delete",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          commentId: commentId,
-          author: author,
-          content: content,
-        }),
-      }).then(
-          res => {
-            if (!res.ok) {
-              alert("댓글 작성자만 삭제가 가능합니다. 이름을 확인 해주세요.");
-            } else {
-              alert("삭제 되었습니다.");
-              window.location.href = location.href;
-            }
+    fetch(`http://localhost:8080/comment`, {
+      method: "Delete",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commentId: commentId,
+        author: author,
+        content: content,
+      }),
+    }).then(
+        res => {
+          if (!res.ok) {
+            alert("댓글 작성자만 삭제가 가능합니다. 이름을 확인 해주세요.");
+          } else {
+            alert("삭제 되었습니다.");
+            window.location.href = location.href;
           }
-      )
-    };
+        }
+    )
+  };
 
-    let editComment = (e, commentId) => {
-      e.preventDefault();
+  let editComment = (e, commentId) => {
+    e.preventDefault();
 
-      fetch(`http://localhost:8080/comment`, {
-        method: "PATCH",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          commentId: commentId,
-          author: document.getElementById("edit-author").value,
-          content: document.getElementById("edit-content").value,
-        }),
-      }).then(
-          res => {
-            if (!res.ok) {
-              alert("댓글 작성자만 수정이 가능합니다. 이름을 확인 해주세요.");
-            } else {
-              alert("수정 되었습니다.");
-              window.location.href = location.href;
-            }
+    fetch(`http://localhost:8080/comment`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        commentId: commentId,
+        author: document.getElementById("edit-author").value,
+        content: document.getElementById("edit-content").value,
+      }),
+    }).then(
+        res => {
+          if (!res.ok) {
+            alert("댓글 작성자만 수정이 가능합니다. 이름을 확인 해주세요.");
+          } else {
+            alert("수정 되었습니다.");
+            window.location.href = location.href;
           }
-      )
-    };
+        }
+    )
+  };
 
-    for (let i = 0; i < editBtns.length; i++) {
-      editBtns[i].addEventListener("click", () => {
-        commentForms[i].classList.add("hidden");
-        editForms[i].classList.remove("hidden");
-      });
-    }
+  for (let i = 0; i < editBtns.length; i++) {
+    editBtns[i].addEventListener("click", () => {
+      commentForms[i].classList.add("hidden");
+      editForms[i].classList.remove("hidden");
+    });
+  }
 </script>
 </body>
 </html>

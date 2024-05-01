@@ -23,7 +23,7 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
 
     public final JdbcTemplate jdbcTemplate;
 
-    public  RowMapper<Board> boardRowMapper = (rs, count) -> {
+    public RowMapper<Board> boardRowMapper = (rs, count) -> {
         return Board.builder()
             .id(rs.getLong("id"))
             .author(rs.getString("author"))
@@ -53,7 +53,7 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
                     .content(rs.getString("content"))
                     .author(rs.getString("author"))
                     .build();
-            }).stream().forEach(p -> p.setBoard(board.get()));
+            }).forEach(p -> p.setBoard(board.get()));
         }
 
         return board;
@@ -84,7 +84,7 @@ public class BoardJdbcTemplateRepository implements JdbcTemplateRepository {
 
     @Override
     public Board save(Board board) {
-        if(board.getId() == null) {
+        if (board.getId() == null) {
             String sql = "INSERT INTO board(name, author, created_at, updated_at) values (?, ?, ?, ?)";
             KeyHolder keyHolder = new GeneratedKeyHolder();
 

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
-      rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+        rel="stylesheet"
     />
     <style>
       * {
@@ -31,79 +31,80 @@
       }
     </style>
     <title>OurDev</title>
-  </head>
-  <body class="bg-[skyblue]">
-    <div class="flex flex-col pt-[100px]">
-      <h1 class="text-center text-[50px]">게시판 생성</h1>
-      <form action="/board" method="post" th:method="post" class="flex flex-col px-[200px]">
+</head>
+<body class="bg-[skyblue]">
+<div class="flex flex-col pt-[100px]">
+    <h1 class="text-center text-[50px]">게시판 생성</h1>
+    <form action="/board" method="post" th:method="post" class="flex flex-col px-[200px]">
         <label>게시판 이름 ('게시판' 제외)</label>
         <input
-          type="text"
-          name="name"
-          id="name"
-          placeholder="게시판 이름을 입력하세요. ex) 질문, Q&A"
-          class="px-[20px] py-[5px]"
+            type="text"
+            name="name"
+            id="name"
+            placeholder="게시판 이름을 입력하세요. ex) 질문, Q&A"
+            class="px-[20px] py-[5px]"
         />
         <label>생성자 이름</label>
         <input
-          type="text"
-          name="author"
-          id="author"
-          placeholder="게시판 생성자 이름을 입력하세요"
-          class="px-[20px] py-[5px]"
+            type="text"
+            name="author"
+            id="author"
+            placeholder="게시판 생성자 이름을 입력하세요"
+            class="px-[20px] py-[5px]"
         />
         <button
-          type="submit"
-          id="submit"
-          class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
-          th:onclick="requestPost(event, [[${names}]]);"
+            type="submit"
+            id="submit"
+            class="border-2 border-black mt-[30px] text-[40px] hover:bg-black hover:text-white"
+            th:onclick="requestPost(event, [[${names}]]);"
         >
-          등 록
+            등 록
         </button>
-      </form>
-    </div>
+    </form>
+</div>
 
-    <script>
-      const requestPost = (event, boards) => {
-        event.preventDefault();
+<script>
+  const requestPost = (event, boards) => {
+    event.preventDefault();
 
-        let input = document.getElementsByTagName('input');
-        let author = document.getElementById("author").value;
-        let name = document.getElementById("name").value;
+    let input = document.getElementsByTagName('input');
+    let author = document.getElementById("author").value;
+    let name = document.getElementById("name").value;
 
+    if (input[0].value === '' || input[1].value === '') {
+      alert('모든 정보를 입력해주세요');
+      return;
+    }
 
-        if (input[0].value === '' || input[1].value === '') {
-          alert('모든 정보를 입력해주세요');
-          return;
-        }
+    let failed = false;
+    boards.forEach(e => {
+      if (e === name) {
+        failed = true;
+        alert("이름 중복. 다른 이름을 입력해주세요");
+        return;
+      }
+    })
 
-        let failed = false;
-        boards.forEach(e => {
-          if(e === name) {
-            failed = true;
-            alert("이름 중복. 다른 이름을 입력해주세요");
-            return;
-          }
-        })
+    if (failed) {
+      return;
+    }
 
-        if(failed) return;
-
-        return fetch("http://localhost:8080/board", {
-          method: "Post",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            author: author,
-            name: name,
-          }),
-        })
-        .then(res => res.json())
-        .then(data => {
-          alert("게시판이 생성 되었습니다.")
-          window.location.href = `/board`;
-        })
-      };
-    </script>
-  </body>
+    return fetch("http://localhost:8080/board", {
+      method: "Post",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        author: author,
+        name: name,
+      }),
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert("게시판이 생성 되었습니다.")
+      window.location.href = `/board`;
+    })
+  };
+</script>
+</body>
 </html>
