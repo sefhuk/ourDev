@@ -61,12 +61,8 @@
         <a class="flex justify-center items-center text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
            th:href="@{/board/{boardId}/post/{postId}/update(boardId=${boardId}, postId=${postId}, title=${post.title}, content=${post.content}, author=${post.author})}"><span>게시글 수정</span></a>
     </div>
-    <p class="w-[80%] text-[20px] mb-[40px] text-left" th:text="${post.content}">
-        dfdsafsafsadddddddddddddddddddddddddddddddddddddddddddddd<br/>dfdddddddddd
-        fdddddddddd dddddddddddddddddddddddddddddddddddddddddddddd<br/>bb
-    </p>
-
-    <div class="flex flex-col items-start w-11/12 pt-[20px] border-t-2">
+    <p class="w-[80%] text-[20px] mb-[40px] text-left whitespace-pre" th:text="${post.content}"></p>
+    <div class="flex flex-col items-start w-[95%] pt-[20px] border-t-2">
         <p class="text-[50px] mb-[30px]">Comment</p>
         <form th:action="@{/comment(postId=${postId}, boardId=${boardId})}" method="post"
               class="flex flex-col border-b-2 border-black pb-[50px] mb-[50px]">
@@ -95,14 +91,20 @@
 
         <div class="comments flex justify-between w-[100%] border-b-2 border-[gray] mb-[40px]"
              th:each="comment: ${comments}">
-            <div class="my-[20px]">
-                <p class="text-[25px] mb-[10px]" th:text="|댓글 작성자: ${comment.author}|">댓글 작성자 1</p>
-                <p class="pl-[50px]" th:text="${comment.content}">댓글 내용1</p>
+            <div id="delete-form" class="my-[20px] flex flex-col">
+                <input class="text-[25px] mb-[10px]" th:value="|댓글 작성자: ${comment.author}|" readonly>
+                <div class="ml-[50px] whitespace-pre" th:text="${comment.content}" ></div>
             </div>
             <div class="flex flex-col justify-center items-end w-[300px]">
                 <button
-                    class="text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
+                    class="delete-btn text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
                     type="submit">삭제
+                </button>
+                <button
+                    class="delete-submit text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] hidden"
+                    type="submit"
+                    th:onclick="deleteRequest(event, [[${comment.id}]], [[${boardId}]], [[${postId}]])">
+                삭제 확인
                 </button>
                 <button
                     class="edit-btn text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] hover:bg-[black]"
@@ -111,7 +113,7 @@
             </div>
             <form method="post"
                   th:action="@{/comment/edit(boardId=${boardId}, postId=${postId}, commentId=${comment.id})}"
-                  class="edit-form flex flex-col mb-[50px] hidden">
+                  class="flex flex-col mb-[50px] hidden edit-form">
                 <input
                     type="text"
                     name="author"
@@ -142,18 +144,47 @@
     let comments = document.getElementsByClassName("comments");
     let editForms = document.getElementsByClassName("edit-form");
     let editBtns = document.getElementsByClassName("edit-btn");
+    let deleteBtns = document.getElementsByClassName("delete-btn");
+    let deleteSubmits = document.getElementsByClassName("delete-submit");
+
+    let deleteRequest = (e, commentId, boardId, postId) => {
+        fetch(`http://localhost:8080/comment?boardId=${boardId}&postId=${postId}`, {
+            method: "Delete",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                commentId: commentId,
+            }),
+        }).then(
+            res => {
+                if (res.ok) {
+                    window.location.href = location.href;
+                }
+            }
+        )
+    };
 
     buttons[0].addEventListener("click", (e) => {
         e.preventDefault();
-        buttons[0].style.display = "none";
-        buttons[1].style.display = "block";
+        buttons[0].classList.add("hidden");
+        buttons[1].classList.remove("hidden");
     })
 
     for (let i = 0; i < editBtns.length; i++) {
         editBtns[i].addEventListener("click", () => {
-            comments[i].getElementsByTagName("div")[0].style.display = "none";
-            comments[i].getElementsByTagName("div")[1].style.display = "none";
-            editForms[i].style.display = "block";
+            comments[i].getElementsByTagName("div")[0].classList.add("hidden");
+            comments[i].getElementsByTagName("div")[2].classList.add("hidden");
+            comments[i].getElementsByTagName("form")[0].classList.add("hidden");
+            editForms[i].classList.remove("hidden");
+        });
+    }
+
+    for (let i = 0; i < deleteBtns.length; i++) {
+        deleteBtns[i].addEventListener("click", (e) => {
+            e.preventDefault();
+            deleteBtns[i].classList.add("hidden");
+            deleteSubmits[i].classList.remove("hidden");
         });
     }
 </script>
