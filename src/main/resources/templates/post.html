@@ -115,7 +115,7 @@
                 <button
                     type="submit"
                     class="edit-submit w-11/12 h-[50px] text-[25px] border-[1px] border-black hover:bg-black hover:text-white"
-                    th:onclick="editRequest(event, [[${comment.id}]])"
+                    th:onclick="editComment(event, [[${comment.id}]])"
                 >
                     댓글 수정
                 </button>
@@ -124,7 +124,7 @@
                 <button
                     class="text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black] text-white text-[20px] bg-[red] rounded-xl w-[100px] h-[35px] text-center ml-[20px] mb-[7px] hover:bg-[black]"
                     type="submit"
-                    th:onclick="deleteRequest(event, [[${comment.id}]], [[${comment.content}]])">
+                    th:onclick="deleteComment(event, [[${comment.id}]], [[${comment.content}]])">
                 삭제
                 </button>
                 <button
@@ -140,7 +140,7 @@
     let editBtns = document.getElementsByClassName("edit-btn");
     let commentForms = document.getElementsByClassName("comment-form");
 
-    let deleteRequest = (e, commentId, content) => {
+    let deleteComment = (e, commentId, content) => {
       e.preventDefault();
 
       let author = prompt("댓글 작성자를 확인합니다. 이름을 입력해주세요.")
@@ -167,7 +167,7 @@
       )
     };
 
-    let editRequest = (e, commentId) => {
+    let editComment = (e, commentId) => {
       e.preventDefault();
 
       fetch(`http://localhost:8080/comment`, {
