@@ -2,6 +2,7 @@ package hyuk.ourDev.domain.post.service;
 
 import hyuk.ourDev.domain.board.entity.Board;
 import hyuk.ourDev.domain.board.repository.BoardJdbcTemplateRepository;
+import hyuk.ourDev.domain.post.dto.PostRequestDto;
 import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.repository.PostRepository;
 import java.util.Optional;
@@ -35,14 +36,15 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public void modifyPost(Long postId, MultiValueMap<String, String> formData) {
+    public void modifyPost(Long postId, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(postId).orElse(null);
 
         if (post == null) {
             throw new RuntimeException();
         }
-        post.updatePost(formData.getFirst("title"), formData.getFirst("author"),
-            formData.getFirst("content"));
+
+        post.updatePost(postRequestDto.getTitle(), post.getAuthor(),
+            postRequestDto.getContent());
         postRepository.save(post);
     }
 
