@@ -22,7 +22,7 @@ public class PostService {
         return postRepository.findById(postId).orElse(null);
     }
 
-    public void addPost(Long boardId, Post post) {
+    public Post addPost(Long boardId, Post post) {
 
         Optional<Board> findBoard = boardJdbcTemplateRepository.findById(boardId);
 
@@ -32,19 +32,22 @@ public class PostService {
 
         post.setBoard(findBoard.get());
 
-        postRepository.save(post);
+        return postRepository.save(post);
     }
 
-    public void modifyPost(Long postId, PostRequestDto postRequestDto) {
+    public Post modifyPost(Long postId, PostRequestDto postRequestDto) {
         Post post = postRepository.findById(postId).orElse(null);
 
         if (post == null) {
             throw new RuntimeException();
         }
 
-        post.updatePost(postRequestDto.getTitle(), post.getAuthor(),
+        post.updatePost(postRequestDto.getTitle(), postRequestDto.getAuthor(),
             postRequestDto.getContent());
+
         postRepository.save(post);
+
+        return post;
     }
 
     public void removePost(Long postId) {
