@@ -11,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
 public interface PostMapper {
 
     @Mapping(source = "board.id", target = "boardId")
-    PostResponseDto PostToPostResponseDto(Post post);
+    PostResponseDto postToPostResponseDto(Post post);
 
-    Post PostRequestDtoToPost(PostRequestDto postRequestDto);
+    Post postRequestDtoToPost(PostRequestDto postRequestDto);
 }
