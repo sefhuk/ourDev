@@ -1,6 +1,8 @@
 package hyuk.ourDev.domain.post.controller;
 
+import hyuk.ourDev.domain.comment.dto.CommentResponseDto;
 import hyuk.ourDev.domain.comment.entity.Comment;
+import hyuk.ourDev.domain.comment.mapper.CommentMapper;
 import hyuk.ourDev.domain.post.dto.PostRequestDto;
 import hyuk.ourDev.domain.post.entity.Post;
 import hyuk.ourDev.domain.post.mapper.PostMapper;
@@ -29,6 +31,7 @@ public class PostController {
 
     private final PostService postService;
     private final PostMapper postMapper;
+    private final CommentMapper commentMapper;
 
     @GetMapping("/post/{id}")
     public String postDetails(@PathVariable("board_id") Long boardId,
@@ -39,7 +42,8 @@ public class PostController {
             throw new RuntimeException();
         }
 
-        List<Comment> comments = post.getComments();
+        List<CommentResponseDto> comments = post.getComments().stream()
+            .map(commentMapper::commentToCommentResponseDto).toList();
 
         model.addAttribute("post", postMapper.postToPostResponseDto(post));
         model.addAttribute("boardId", boardId);
