@@ -99,7 +99,7 @@ public class BoardControllerTest {
             .andExpect(view().name("board"))
             .andExpect(model().attribute("board", bm.boardToBoardResponseDto(responseBoard)))
             .andExpect(model().attribute("posts",
-                Arrays.asList(pm.PostToPostResponseDto(post1), pm.PostToPostResponseDto(post2))));
+                Arrays.asList(pm.postToPostResponseDto(post1), pm.postToPostResponseDto(post2))));
 
     }
 
