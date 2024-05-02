@@ -60,7 +60,7 @@ public class BoardController {
         BoardResponseDto responseBoard = boardMapper.boardToBoardResponseDto(board);
 
         List<PostResponseDto> responsePosts = responseBoard.getPosts().stream()
-            .map(postMapper::PostToPostResponseDto).collect(
+            .map(postMapper::postToPostResponseDto).collect(
                 Collectors.toList());
         model.addAttribute("board", responseBoard);
         model.addAttribute("posts", responsePosts);
