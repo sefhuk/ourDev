@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PostController {
 
     private final PostService postService;
-    private final PostMapper mapper;
+    private final PostMapper postMapper;
 
     @GetMapping("/post/{id}")
     public String postDetails(@PathVariable("board_id") Long boardId,
@@ -41,7 +41,7 @@ public class PostController {
 
         List<Comment> comments = post.getComments();
 
-        model.addAttribute("post", mapper.PostToPostResponseDto(post));
+        model.addAttribute("post", postMapper.postToPostResponseDto(post));
         model.addAttribute("boardId", boardId);
         model.addAttribute("postId", postId);
         model.addAttribute("comments", comments);
@@ -63,7 +63,7 @@ public class PostController {
             .content(formData.getFirst("content"))
             .password(Integer.parseInt(Objects.requireNonNull(formData.getFirst("password")))).build();
 
-        Post requestPost = mapper.PostRequestDtoToPost(request);
+        Post requestPost = postMapper.postRequestDtoToPost(request);
 
         postService.addPost(boardId, requestPost);
 

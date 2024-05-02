@@ -9,7 +9,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {
 
-    CommentResponseDto CommentToCommentResponseDto(Comment comment);
+    CommentResponseDto commentToCommentResponseDto(Comment comment);
 
-    Comment CommentRequestTOComment(CommentRequestDto commentRequestDto);
+    Comment commentRequestTOComment(CommentRequestDto commentRequestDto);
 }
