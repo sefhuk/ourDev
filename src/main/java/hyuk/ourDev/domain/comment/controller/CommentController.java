@@ -1,6 +1,6 @@
 package hyuk.ourDev.domain.comment.controller;
 
-import hyuk.ourDev.domain.comment.dto.CommentRequest;
+import hyuk.ourDev.domain.comment.dto.CommentRequestDto;
 import hyuk.ourDev.domain.comment.entity.Comment;
 import hyuk.ourDev.domain.comment.service.CommentService;
 import hyuk.ourDev.domain.post.entity.Post;
@@ -41,28 +41,28 @@ public class CommentController {
     }
 
     @PatchMapping
-    public ResponseEntity<Void> commendModify(@RequestBody CommentRequest commentRequest) {
-        Comment comment = commentService.findComment(commentRequest.getCommentId());
+    public ResponseEntity<Void> commendModify(@RequestBody CommentRequestDto commentRequestDto) {
+        Comment comment = commentService.findComment(commentRequestDto.getCommentId());
 
-        if (!comment.getAuthor().equals(commentRequest.getAuthor())) {
+        if (!comment.getAuthor().equals(commentRequestDto.getAuthor())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        commentService.modifyComment(commentRequest.getCommentId(), commentRequest.getAuthor(),
-            commentRequest.getContent());
+        commentService.modifyComment(commentRequestDto.getCommentId(), commentRequestDto.getAuthor(),
+            commentRequestDto.getContent());
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> commentRemove(@RequestBody CommentRequest commentRequest) {
-        Comment comment = commentService.findComment(commentRequest.getCommentId());
+    public ResponseEntity<Void> commentRemove(@RequestBody CommentRequestDto commentRequestDto) {
+        Comment comment = commentService.findComment(commentRequestDto.getCommentId());
 
-        if (!comment.getAuthor().equals(commentRequest.getAuthor())) {
+        if (!comment.getAuthor().equals(commentRequestDto.getAuthor())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        commentService.removeComment(commentRequest.getCommentId());
+        commentService.removeComment(commentRequestDto.getCommentId());
         return ResponseEntity.ok().build();
     }
 }

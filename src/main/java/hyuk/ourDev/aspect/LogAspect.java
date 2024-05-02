@@ -14,11 +14,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LogAspect {
 
-    @Pointcut("execution(* hyuk.ourDev.domain.board..*(..)) "
-        + "&& !execution(* hyuk.ourDev.domain.board.dto..*(..)) "
-        + "&& !execution(* hyuk.ourDev.domain.board.entity..*(..))"
-        + "&& !execution(* hyuk.ourDev.domain.board.mapper..*(..))")
-    public void logging() {}
+    @Pointcut("execution(* hyuk.ourDev.domain..*(..))")
+    public void logging() {
+    }
 
     @Before("logging()")
     public void beforeMethod(JoinPoint joinpoint) {
