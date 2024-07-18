@@ -7,7 +7,7 @@
 
 ## 와이어 프레임(Figma)
 
-![스크린샷_2024-04-22_오전_12.41.41](/uploads/3f3a2d2ea4e3673fae0653446723c8d3/스크린샷_2024-04-22_오전_12.41.41.png)
+<img width="1018" alt="wf1" src="https://github.com/user-attachments/assets/42679eea-38b1-4aec-9025-18ff1f6479a6">
 
 # ERD
-![스크린샷_2024-04-22_오전_12.46.56](/uploads/040e35fd7b13dea6b5f443e7d575d21b/스크린샷_2024-04-22_오전_12.46.56.png)
+<img width="925" alt="erd1" src="https://github.com/user-attachments/assets/dfaf463a-845d-41dd-b477-2e5e9bd60c0e">
